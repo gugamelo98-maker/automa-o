@@ -3,1180 +3,764 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WhatsApp CTA — Configurador</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>WhatsApp Central</title>
 <style>
-  :root {
-    --bg: #0a0d14;
-    --surface: #10141f;
-    --surface2: #161c2d;
-    --border: #1e2a42;
-    --green: #25d366;
-    --green-dim: #1a9348;
-    --green-glow: rgba(37,211,102,0.12);
-    --blue: #3b82f6;
-    --blue-dim: #1d4ed8;
-    --orange: #f59e0b;
-    --red: #ef4444;
-    --text: #e8edf5;
-    --text-dim: #6b7a99;
-    --text-muted: #3d4d6b;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Syne', sans-serif;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(37,211,102,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(37,211,102,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .wrapper {
-    position: relative;
-    z-index: 1;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-  }
-
-  /* Header */
-  header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 48px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .logo-icon {
-    width: 48px; height: 48px;
-    background: var(--green);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 0 24px var(--green-glow);
-  }
-
-  .logo-icon svg { width: 28px; height: 28px; fill: #000; }
-
-  header h1 {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-  }
-
-  header p {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-top: 2px;
-  }
-
-  /* Flow diagram */
-  .flow-bar {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin-bottom: 40px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 24px;
-    overflow-x: auto;
-  }
-
-  .flow-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    min-width: 100px;
-    flex: 1;
-  }
-
-  .flow-step .dot {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-
-  .flow-step.step-green .dot  { background: var(--green-glow); border: 2px solid var(--green); }
-  .flow-step.step-blue .dot   { background: rgba(59,130,246,0.1); border: 2px solid var(--blue); }
-  .flow-step.step-orange .dot { background: rgba(245,158,11,0.1); border: 2px solid var(--orange); }
-  .flow-step.step-red .dot    { background: rgba(239,68,68,0.1); border: 2px solid var(--red); }
-
-  .flow-step span {
-    font-size: 11px;
-    color: var(--text-dim);
-    text-align: center;
-    font-family: var(--mono);
-  }
-
-  .flow-arrow {
-    color: var(--text-muted);
-    font-size: 18px;
-    flex-shrink: 0;
-    padding: 0 4px;
-    margin-bottom: 22px;
-  }
-
-  /* Grid layout */
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-
-  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    transition: border-color .2s;
-  }
-
-  .card:focus-within { border-color: var(--green); }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .card-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-
-  .card-icon.green  { background: var(--green-glow); }
-  .card-icon.blue   { background: rgba(59,130,246,0.1); }
-  .card-icon.orange { background: rgba(245,158,11,0.1); }
-
-  .card h2 { font-size: 14px; font-weight: 700; }
-  .card p.sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
-
-  .field { margin-bottom: 16px; }
-  .field:last-child { margin-bottom: 0; }
-
-  label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: .6px;
-    margin-bottom: 6px;
-  }
-
-  label .badge {
-    display: inline-block;
-    font-size: 9px;
-    padding: 1px 6px;
-    border-radius: 4px;
-    margin-left: 6px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .4px;
-    vertical-align: middle;
-  }
-
-  label .badge.req  { background: rgba(239,68,68,0.15); color: #f87171; }
-  label .badge.opt  { background: rgba(107,122,153,0.2); color: var(--text-dim); }
-  label .badge.max  { background: rgba(245,158,11,0.12); color: #fbbf24; }
-
-  input, textarea, select {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 13px;
-    padding: 10px 12px;
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-    resize: vertical;
-  }
-
-  input:focus, textarea:focus, select:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 0 3px var(--green-glow);
-  }
-
-  input::placeholder, textarea::placeholder { color: var(--text-muted); }
-
-  .char-counter {
-    text-align: right;
-    font-size: 10px;
-    font-family: var(--mono);
-    margin-top: 4px;
-    transition: color .2s;
-  }
-
-  .char-counter.ok      { color: var(--text-dim); }
-  .char-counter.warning { color: var(--orange); }
-  .char-counter.over    { color: var(--red); }
-
-  /* Preview phone */
-  .preview-section {
-    margin-bottom: 20px;
-  }
-
-  .preview-section h3 {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: .6px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .preview-section h3::before, .preview-section h3::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .phone-wrap {
-    display: flex;
-    justify-content: center;
-  }
-
-  .phone {
-    width: 280px;
-    background: #111b21;
-    border-radius: 24px;
-    padding: 20px 12px 16px;
-    border: 1.5px solid #2a3942;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    position: relative;
-  }
-
-  .phone-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 4px 16px;
-    border-bottom: 1px solid #1e2c35;
-    margin-bottom: 16px;
-  }
-
-  .phone-avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: var(--green);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-
-  .phone-name { font-size: 14px; font-weight: 600; font-family: sans-serif; }
-  .phone-status { font-size: 11px; color: #8696a0; font-family: sans-serif; }
-
-  .bubble {
-    background: #1f2c34;
-    border-radius: 4px 12px 12px 12px;
-    padding: 10px 12px 8px;
-    font-family: sans-serif;
-    max-width: 240px;
-    position: relative;
-  }
-
-  .bubble::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -8px;
-    border: 8px solid transparent;
-    border-right-color: #1f2c34;
-    border-top-color: #1f2c34;
-    border-radius: 2px 0 0 0;
-  }
-
-  .bubble-header {
-    font-size: 13px;
-    font-weight: 700;
-    color: #e9edef;
-    margin-bottom: 6px;
-  }
-
-  .bubble-body {
-    font-size: 13px;
-    color: #d1d7db;
-    line-height: 1.5;
-    margin-bottom: 6px;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  .bubble-footer {
-    font-size: 11px;
-    color: #8696a0;
-    margin-bottom: 8px;
-  }
-
-  .bubble-time {
-    text-align: right;
-    font-size: 10px;
-    color: #8696a0;
-  }
-
-  .bubble-btn {
-    margin-top: 10px;
-    border-top: 1px solid #2a3942;
-    padding-top: 10px;
-    text-align: center;
-    color: #00a884;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-family: sans-serif;
-  }
-
-  .bubble-btn svg {
-    width: 16px; height: 16px;
-    fill: #00a884;
-  }
-
-  /* JSON output */
-  .json-section {
-    margin-bottom: 20px;
-  }
-
-  .json-box {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .json-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-
-  .json-toolbar span {
-    font-size: 11px;
-    font-family: var(--mono);
-    color: var(--text-dim);
-  }
-
-  .json-toolbar .dots { display: flex; gap: 6px; }
-  .json-toolbar .dot-circle {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-  }
-  .dot-red    { background: #ef4444; }
-  .dot-yellow { background: #f59e0b; }
-  .dot-green  { background: #22c55e; }
-
-  pre {
-    padding: 20px;
-    font-family: var(--mono);
-    font-size: 12px;
-    line-height: 1.7;
-    overflow-x: auto;
-    color: var(--text);
-    max-height: 340px;
-    overflow-y: auto;
-  }
-
-  .tok-key    { color: #7dd3fc; }
-  .tok-str    { color: #86efac; }
-  .tok-num    { color: #fca5a5; }
-  .tok-bool   { color: #c084fc; }
-  .tok-null   { color: var(--text-dim); }
-
-  /* Buttons */
-  .actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    border-radius: 10px;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: all .2s;
-    text-decoration: none;
-  }
-
-  .btn-primary {
-    background: var(--green);
-    color: #000;
-  }
-  .btn-primary:hover { background: #20c55e; box-shadow: 0 0 20px var(--green-glow); }
-
-  .btn-secondary {
-    background: var(--surface2);
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-secondary:hover { border-color: var(--green); color: var(--green); }
-
-  .btn-danger {
-    background: rgba(239,68,68,0.1);
-    color: #f87171;
-    border: 1px solid rgba(239,68,68,0.3);
-  }
-  .btn-danger:hover { background: rgba(239,68,68,0.2); }
-
-  /* Alert */
-  .alert {
-    display: none;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    border-radius: 10px;
-    font-size: 13px;
-    margin-bottom: 20px;
-    animation: slideIn .3s ease;
-  }
-
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .alert.success { background: var(--green-glow); border: 1px solid var(--green); color: var(--green); display: flex; }
-  .alert.error   { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); color: #f87171; display: flex; }
-  .alert.info    { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.3); color: #93c5fd; display: flex; }
-
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--surface2);
-    padding: 4px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 1px solid var(--border);
-  }
-
-  .tab-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 7px;
-    background: transparent;
-    color: var(--text-dim);
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-  }
-
-  .tab-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  /* Trigger badge */
-  .trigger-info {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .trigger-info .icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
-
-  .trigger-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .trigger-info p  { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
-
-  .trigger-info code {
-    font-family: var(--mono);
-    font-size: 11px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1px 6px;
-    color: var(--green);
-  }
-
-  /* Copied toast */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--green);
-    color: #000;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 12px 20px;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    transform: translateY(80px);
-    opacity: 0;
-    transition: all .3s ease;
-    z-index: 999;
-  }
-
-  .toast.show { transform: translateY(0); opacity: 1; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--surface); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:#10141f;border-bottom:1px solid #1e2a42;padding:0 20px;display:flex;align-items:center;height:52px;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:8px;margin-right:24px;flex-shrink:0}
+.logo-icon{width:30px;height:30px;background:#25d366;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:17px;height:17px;fill:#000}
+.logo b{font-size:14px;font-weight:700}
+.nav{display:flex;height:52px}
+.tab{height:100%;padding:0 16px;border:none;background:transparent;color:#6b7a99;font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tab.active{color:#e8edf5;border-bottom-color:#25d366}
+.tab:hover:not(.active){color:#c0c8d8}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.sdot{width:7px;height:7px;border-radius:50%;background:#374151;transition:all .3s}
+.sdot.on{background:#25d366;box-shadow:0 0 7px rgba(37,211,102,.5)}
+.stxt{font-size:11px;color:#6b7a99}
+.pane{display:none;flex:1;overflow:hidden}
+.pane.active{display:flex}
+#pane-auto{flex-direction:column;overflow-y:auto;padding:20px}
+#pane-mon{flex-direction:column;overflow-y:auto;padding:20px}
+
+/* ── CHAT ── */
+#pane-chat{flex-direction:row}
+.sidebar{width:280px;border-right:1px solid #1e2a42;display:flex;flex-direction:column;background:#0d1120;flex-shrink:0}
+.sh{padding:12px 14px;border-bottom:1px solid #1e2a42;display:flex;align-items:center;justify-content:space-between}
+.sh span{font-size:13px;font-weight:700}
+.cbadge{background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.sr{padding:8px 12px;border-bottom:1px solid #1e2a42}
+.sr input{width:100%;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none}
+.sr input:focus{border-color:#25d366}
+.clist{flex:1;overflow-y:auto}
+.ci{padding:10px 14px;cursor:pointer;border-bottom:1px solid #0f1624;transition:background .1s;display:flex;align-items:center;gap:9px}
+.ci:hover{background:#131929}
+.ci.sel{background:#161c2d;border-left:2px solid #25d366}
+.av{width:34px;height:34px;border-radius:50%;background:#1e2a42;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.av.g{background:rgba(37,211,102,.1);color:#25d366}
+.cinfo{flex:1;min-width:0}
+.cname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cprev{font-size:11px;color:#6b7a99;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.ctime{font-size:10px;color:#6b7a99;flex-shrink:0}
+.unr{background:#25d366;color:#000;font-size:9px;font-weight:700;border-radius:8px;padding:1px 5px;margin-top:2px}
+.chat-wrap{flex:1;display:flex;flex-direction:column;background:#0a0d14}
+.chat-hdr{padding:10px 16px;border-bottom:1px solid #1e2a42;background:#10141f;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ch-info{flex:1}
+.ch-name{font-size:14px;font-weight:700}
+.ch-phone{font-size:11px;color:#6b7a99;font-family:monospace;margin-top:1px}
+.msgs{flex:1;overflow-y:auto;padding:14px 16px 8px;display:flex;flex-direction:column;gap:6px}
+.msg{display:flex;flex-direction:column;max-width:68%}
+.msg.in{align-self:flex-start}
+.msg.out{align-self:flex-end}
+.bbl{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word}
+.msg.in .bbl{background:#1f2c34;border-radius:4px 12px 12px 12px}
+.msg.out .bbl{background:#005c4b;border-radius:12px 4px 12px 12px}
+.bbl.cta{padding-bottom:0}
+.cta-pb{border-top:1px solid rgba(255,255,255,.1);padding:7px 10px;color:#00a884;font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px}
+.mtime{font-size:10px;color:#6b7a99;margin-top:2px;padding:0 2px}
+.msg.out .mtime{text-align:right}
+.mfrom{font-size:10px;color:#6b7a99;margin-bottom:1px;padding:0 2px}
+.no-conv{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#374151}
+.no-conv .ni{font-size:44px}
+.no-conv p{font-size:13px;color:#6b7a99}
+.input-area{padding:10px 14px;border-top:1px solid #1e2a42;background:#10141f;flex-shrink:0}
+.mtype-tabs{display:flex;gap:5px;margin-bottom:8px}
+.mtt{padding:4px 11px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #1e2a42;background:#161c2d;color:#6b7a99;transition:all .15s}
+.mtt.active{background:rgba(37,211,102,.1);color:#25d366;border-color:rgba(37,211,102,.3)}
+.cta-extra{background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:10px;margin-bottom:8px;display:none;gap:6px;flex-direction:column}
+.cta-extra.show{display:flex}
+.cta-extra input{background:#0a0d14;border:1px solid #1e2a42;border-radius:6px;color:#e8edf5;font-size:12px;padding:6px 9px;outline:none;font-family:monospace;width:100%}
+.cta-extra input:focus{border-color:#25d366}
+.cta-extra label{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.4px}
+.irow{display:flex;gap:8px;align-items:flex-end}
+.irow textarea{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:9px;color:#e8edf5;font-size:13px;padding:9px 12px;outline:none;resize:none;min-height:40px;max-height:110px;font-family:inherit;line-height:1.4}
+.irow textarea:focus{border-color:#25d366}
+.sbtn{width:40px;height:40px;background:#25d366;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.sbtn:hover{background:#20c55e}
+.sbtn svg{width:17px;height:17px;fill:#000}
+
+/* ── AUTOMAÇÕES ── */
+.auto-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
+.auto-hdr h2{font-size:15px;font-weight:700}
+.auto-list{display:flex;flex-direction:column;gap:12px}
+.auto-card{background:#10141f;border:1px solid #1e2a42;border-radius:12px;overflow:hidden;transition:border-color .2s}
+.auto-card.enabled{border-color:rgba(37,211,102,.3)}
+.ac-hdr{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer}
+.ac-icon{width:36px;height:36px;border-radius:8px;background:#161c2d;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ac-info{flex:1}
+.ac-name{font-size:13px;font-weight:700}
+.ac-desc{font-size:11px;color:#6b7a99;margin-top:2px}
+.toggle{position:relative;width:36px;height:20px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:#1e2a42;border-radius:10px;cursor:pointer;transition:background .2s}
+.toggle input:checked+.toggle-track{background:#25d366}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
+.toggle input:checked~.toggle-thumb{transform:translateX(16px)}
+.ac-body{display:none;padding:0 18px 18px;border-top:1px solid #1e2a42}
+.ac-body.open{display:block}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:640px){.field-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:4px}
+.field.full{grid-column:1/-1}
+.field label{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px}
+.field input,.field textarea,.field select{background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:8px 10px;outline:none;font-family:monospace;width:100%}
+.field input:focus,.field textarea:focus{border-color:#25d366}
+.field textarea{resize:vertical;font-family:inherit;font-size:13px}
+.kw-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;min-height:32px;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;padding:6px 8px;align-items:center}
+.kw-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.kw-tag button{background:none;border:none;color:#25d366;cursor:pointer;font-size:13px;line-height:1;padding:0}
+.kw-input-row{display:flex;gap:6px;margin-top:8px}
+.kw-input-row input{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none;font-family:monospace}
+.kw-input-row input:focus{border-color:#25d366}
+.ac-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.preview-box{background:#111b21;border-radius:12px;padding:14px;margin-top:12px;max-width:280px}
+.prev-bbl{background:#1f2c34;border-radius:4px 12px 12px 12px;padding:8px 12px 0;font-size:12px;line-height:1.5}
+.prev-hdr{font-weight:700;font-size:12px;color:#e9edef;margin-bottom:4px}
+.prev-body{color:#d1d7db;margin-bottom:4px;word-break:break-word}
+.prev-ftr{font-size:10px;color:#8696a0;margin-bottom:6px}
+.prev-btn{border-top:1px solid #2a3942;padding:7px 0;color:#00a884;font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px}
+.info-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#60a5fa;padding:6px 12px;border-radius:8px;font-size:11px;margin-top:10px}
+
+/* ── MONITOR ── */
+.mon-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
+.mon-hdr h2{font-size:15px;font-weight:700}
+.badge{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2)}
+.tw{background:#10141f;border:1px solid #1e2a42;border-radius:12px;overflow:hidden}
+.tbtop{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #1e2a42;background:#0d1120}
+.tbtop input{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none}
+.tbtop input:focus{border-color:#25d366}
+.tbtop select{background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none;cursor:pointer}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:10px;font-weight:700;color:#6b7a99;text-transform:uppercase;letter-spacing:.4px;padding:10px 14px;text-align:left;border-bottom:1px solid #1e2a42;background:#0d1120}
+tbody tr{border-bottom:1px solid #0f1624;transition:background .1s;cursor:pointer}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#131929}
+tbody td{padding:11px 14px;font-size:12px}
+.pc{font-family:monospace;color:#7dd3fc}
+.sp{display:inline-flex;align-items:center;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.sp.recebido{background:rgba(59,130,246,.1);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}
+.sp.respondido{background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2)}
+.empty{text-align:center;padding:40px;color:#6b7a99;font-size:12px}
+
+/* ── UTILS ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.bo{background:transparent;color:#6b7a99;border:1px solid #1e2a42}.bo:hover{color:#e8edf5;border-color:#6b7a99}
+.bg{background:#25d366;color:#000}.bg:hover{background:#20c55e}
+.br{background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.2)}.br:hover{background:rgba(239,68,68,.15)}
+.bb{background:rgba(59,130,246,.08);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}.bb:hover{background:rgba(59,130,246,.15)}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center}
+.ov.show{display:flex}
+.mo{background:#10141f;border:1px solid #1e2a42;border-radius:14px;padding:22px;width:100%;max-width:420px;margin:16px}
+.mo h3{font-size:14px;font-weight:700;margin-bottom:16px}
+.mf{margin-bottom:11px}
+.ml{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.mv{font-size:13px;font-family:monospace;color:#e8edf5;word-break:break-all}
+.ma{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.toast{position:fixed;bottom:18px;right:18px;background:#25d366;color:#000;font-weight:700;font-size:12px;padding:10px 16px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.4);transform:translateY(60px);opacity:0;transition:all .25s;z-index:999}
+.toast.show{transform:translateY(0);opacity:1}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#1e2a42;border-radius:2px}
 </style>
 </head>
 <body>
-<div class="wrapper">
 
-  <!-- Header -->
-  <header>
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.074.527 4.028 1.456 5.74L0 24l6.408-1.432C8.08 23.473 10.001 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.842 0-3.561-.5-5.042-1.37l-.362-.214-3.737.983.994-3.641-.236-.374C2.696 15.56 2.182 13.83 2.182 12 2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-    </div>
-    <div>
-      <h1>WhatsApp CTA — Configurador de Automação</h1>
-      <p>Gere o JSON do n8n + visualize a mensagem antes de publicar</p>
-    </div>
-  </header>
-
-  <!-- Flow bar -->
-  <div class="flow-bar">
-    <div class="flow-step step-green">
-      <div class="dot">📲</div>
-      <span>Cliente clica<br>no botão</span>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step step-blue">
-      <div class="dot">🔗</div>
-      <span>Meta envia<br>webhook</span>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step step-orange">
-      <div class="dot">⚙️</div>
-      <span>n8n filtra<br>o evento</span>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step step-green">
-      <div class="dot">🛠️</div>
-      <span>Monta<br>CTA</span>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step step-green">
-      <div class="dot">✅</div>
-      <span>Envia para<br>o cliente</span>
-    </div>
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.074.527 4.028 1.456 5.74L0 24l6.408-1.432C8.08 23.473 10.001 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.842 0-3.561-.5-5.042-1.37l-.362-.214-3.737.983.994-3.641-.236-.374C2.696 15.56 2.182 13.83 2.182 12 2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg></div>
+    <b>WhatsApp Central</b>
   </div>
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('config')">⚙️ Configuração</button>
-    <button class="tab-btn" onclick="switchTab('preview')">📱 Preview</button>
-    <button class="tab-btn" onclick="switchTab('json')">{ } JSON n8n</button>
-    <button class="tab-btn" onclick="switchTab('guide')">📋 Instruções</button>
+  <div class="nav">
+    <button class="tab active" onclick="sw('chat')">💬 Conversas</button>
+    <button class="tab" onclick="sw('auto')">⚡ Automações</button>
+    <button class="tab" onclick="sw('mon')">📊 Monitor</button>
   </div>
-
-  <!-- Alert -->
-  <div class="alert" id="alert"></div>
-
-  <!-- TAB: Config -->
-  <div class="tab-content active" id="tab-config">
-
-    <div class="trigger-info">
-      <div class="icon">⚡</div>
-      <div>
-        <h4>Gatilho: Clique em botão do template</h4>
-        <p>O n8n recebe o webhook da Meta quando o cliente clica em qualquer botão quick reply do seu template. O payload chega com <code>type: "button"</code> e o campo <code>button.payload</code> identifica qual botão foi clicado. Você pode filtrar por payload específico no campo abaixo.</p>
-      </div>
-    </div>
-
-    <div class="grid">
-      <!-- Credenciais -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon green">🔑</div>
-          <div>
-            <h2>Credenciais Meta</h2>
-            <p class="sub">Tokens da WhatsApp Cloud API</p>
-          </div>
-        </div>
-        <div class="field">
-          <label>Access Token <span class="badge req">Obrigatório</span></label>
-          <input type="password" id="accessToken" placeholder="EAAxxxxxxxxxxxxxx" oninput="update()">
-        </div>
-        <div class="field">
-          <label>Phone Number ID <span class="badge req">Obrigatório</span></label>
-          <input type="text" id="phoneNumberId" placeholder="123456789012345" oninput="update()">
-        </div>
-        <div class="field">
-          <label>Verify Token (Webhook) <span class="badge req">Obrigatório</span></label>
-          <input type="text" id="verifyToken" placeholder="meu_token_secreto_123" oninput="update()">
-          <p style="font-size:11px;color:var(--text-dim);margin-top:4px">Você escolhe esse valor e configura no Meta Developer Console</p>
-        </div>
-      </div>
-
-      <!-- Filtro de gatilho -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon blue">🎯</div>
-          <div>
-            <h2>Filtro do Gatilho</h2>
-            <p class="sub">Qual botão ativa essa automação</p>
-          </div>
-        </div>
-        <div class="field">
-          <label>Payload do Botão <span class="badge opt">Opcional</span></label>
-          <input type="text" id="filterPayload" placeholder="saber_mais (vazio = qualquer botão)" oninput="update()">
-          <p style="font-size:11px;color:var(--text-dim);margin-top:4px">Deve ser igual ao payload configurado no seu template</p>
-        </div>
-        <div class="field">
-          <label>Texto do Botão <span class="badge opt">Opcional</span></label>
-          <input type="text" id="filterText" placeholder="Saber mais (alternativa ao payload)" oninput="update()">
-        </div>
-        <div class="field" style="margin-top:8px">
-          <label style="margin-bottom:8px">Tipo de botão esperado</label>
-          <select id="filterType" onchange="update()">
-            <option value="both">Ambos (button + button_reply)</option>
-            <option value="button">Template button (quick reply)</option>
-            <option value="interactive">Interactive button_reply</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid">
-      <!-- Mensagem CTA -->
-      <div class="card" style="grid-column: 1 / -1;">
-        <div class="card-header">
-          <div class="card-icon orange">💬</div>
-          <div>
-            <h2>Mensagem CTA de Resposta</h2>
-            <p class="sub">O que o cliente vai receber ao clicar no botão</p>
-          </div>
-        </div>
-        <div class="grid" style="margin-bottom:0">
-          <div>
-            <div class="field">
-              <label>Header <span class="badge opt">Opcional</span> <span class="badge max">máx 60</span></label>
-              <input type="text" id="ctaHeader" placeholder="Olá! Aqui está o que você pediu" maxlength="60" oninput="updateCount('ctaHeader','ctaHeaderCount',60); update()">
-              <div class="char-counter ok" id="ctaHeaderCount">0 / 60</div>
-            </div>
-            <div class="field">
-              <label>Corpo da Mensagem <span class="badge req">Obrigatório</span> <span class="badge max">máx 1024</span></label>
-              <textarea id="ctaBody" rows="4" placeholder="Clique no botão abaixo para acessar nossa página. Use {{NOME}} para personalizar com o nome do cliente." maxlength="1024" oninput="updateCount('ctaBody','ctaBodyCount',1024); update()"></textarea>
-              <div class="char-counter ok" id="ctaBodyCount">0 / 1024</div>
-            </div>
-            <div class="field">
-              <label>Footer <span class="badge opt">Opcional</span> <span class="badge max">máx 60</span></label>
-              <input type="text" id="ctaFooter" placeholder="Respondemos em até 2 horas." maxlength="60" oninput="updateCount('ctaFooter','ctaFooterCount',60); update()">
-              <div class="char-counter ok" id="ctaFooterCount">0 / 60</div>
-            </div>
-          </div>
-          <div>
-            <div class="field">
-              <label>Texto do Botão CTA <span class="badge req">Obrigatório</span> <span class="badge max">máx 20</span></label>
-              <input type="text" id="btnText" placeholder="Acessar agora" maxlength="20" oninput="updateCount('btnText','btnTextCount',20); update()">
-              <div class="char-counter ok" id="btnTextCount">0 / 20</div>
-            </div>
-            <div class="field">
-              <label>URL do Botão <span class="badge req">Obrigatório</span></label>
-              <input type="url" id="btnUrl" placeholder="https://seusite.com.br/pagina" oninput="update()">
-            </div>
-            <div class="field" style="margin-top:12px; padding:16px; background:var(--surface2); border-radius:8px; border:1px solid var(--border);">
-              <p style="font-size:11px; color:var(--text-dim); line-height:1.6">
-                💡 <strong style="color:var(--text)">Dica:</strong> Use <code style="font-family:var(--mono);color:var(--green);background:var(--surface);padding:1px 5px;border-radius:3px">{{NOME}}</code> no corpo e ele será substituído automaticamente pelo nome do contato no WhatsApp do cliente.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="actions" style="margin-top:20px">
-      <button class="btn btn-primary" onclick="generateAndCopy()">
-        <span>⬇️</span> Gerar JSON e Copiar
-      </button>
-      <button class="btn btn-secondary" onclick="switchTab('preview')">
-        <span>📱</span> Ver Preview
-      </button>
-      <button class="btn btn-secondary" onclick="switchTab('json')">
-        <span>{ }</span> Ver JSON
-      </button>
-      <button class="btn btn-danger" onclick="clearAll()">
-        <span>🗑️</span> Limpar
-      </button>
-    </div>
+  <div class="top-right">
+    <div class="sdot" id="sDot"></div>
+    <span class="stxt" id="sTxt">Conectando...</span>
   </div>
-
-  <!-- TAB: Preview -->
-  <div class="tab-content" id="tab-preview">
-    <div class="preview-section">
-      <h3>Como o cliente vai ver</h3>
-      <div class="phone-wrap">
-        <div class="phone">
-          <div class="phone-header">
-            <div class="phone-avatar">🏢</div>
-            <div>
-              <div class="phone-name">Sua Empresa</div>
-              <div class="phone-status">online</div>
-            </div>
-          </div>
-          <div class="bubble">
-            <div class="bubble-header" id="prev-header" style="display:none"></div>
-            <div class="bubble-body" id="prev-body">Configure a mensagem na aba Configuração →</div>
-            <div class="bubble-footer" id="prev-footer" style="display:none"></div>
-            <div class="bubble-time">agora ✓✓</div>
-            <div class="bubble-btn" id="prev-btn">
-              <svg viewBox="0 0 24 24"><path d="M14 3v2H4v14h16v-3h2v4a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1h11zm7 0v4h-2V6.413l-7.293 7.294-1.414-1.414L19.585 5H17V3h4z"/></svg>
-              <span id="prev-btn-text">Texto do botão</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:16px">
-      <button class="btn btn-secondary" onclick="switchTab('config')">← Voltar e editar</button>
-    </div>
-  </div>
-
-  <!-- TAB: JSON -->
-  <div class="tab-content" id="tab-json">
-    <div class="json-section">
-      <div class="json-box">
-        <div class="json-toolbar">
-          <div class="dots">
-            <div class="dot-circle dot-red"></div>
-            <div class="dot-circle dot-yellow"></div>
-            <div class="dot-circle dot-green"></div>
-          </div>
-          <span>n8n_whatsapp_cta_flow.json</span>
-          <button class="btn btn-secondary" style="padding:6px 14px;font-size:12px" onclick="copyJSON()">📋 Copiar</button>
-        </div>
-        <pre id="jsonOutput">// Configure os campos na aba Configuração e clique em "Gerar JSON"</pre>
-      </div>
-    </div>
-    <div class="actions">
-      <button class="btn btn-primary" onclick="copyJSON()">📋 Copiar JSON</button>
-      <button class="btn btn-secondary" onclick="downloadJSON()">⬇️ Baixar .json</button>
-    </div>
-  </div>
-
-  <!-- TAB: Guide -->
-  <div class="tab-content" id="tab-guide">
-    <div style="display:grid;gap:16px">
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon green">1️⃣</div>
-          <div><h2>Importe o fluxo no n8n</h2></div>
-        </div>
-        <p style="font-size:13px;color:var(--text-dim);line-height:1.7">
-          No n8n, vá em <strong style="color:var(--text)">Workflows → Import from JSON</strong> e cole o JSON gerado por este configurador. O fluxo já vem com todos os nós conectados.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon blue">2️⃣</div>
-          <div><h2>Configure o Webhook no Meta Developer</h2></div>
-        </div>
-        <p style="font-size:13px;color:var(--text-dim);line-height:1.7">
-          Acesse <strong style="color:var(--text)">Meta for Developers → WhatsApp → Configuration → Webhooks</strong>.<br><br>
-          • <strong style="color:var(--text)">Callback URL:</strong> URL do webhook do n8n (ex: <code style="font-family:var(--mono);font-size:11px;color:var(--green)">https://seu-n8n.com/webhook/whatsapp-meta-webhook</code>)<br>
-          • <strong style="color:var(--text)">Verify Token:</strong> o mesmo valor que você configurou aqui<br>
-          • <strong style="color:var(--text)">Subscriptions:</strong> marque <code style="font-family:var(--mono);font-size:11px;color:var(--green)">messages</code>
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon orange">3️⃣</div>
-          <div><h2>Entenda o payload de entrada</h2></div>
-        </div>
-        <p style="font-size:13px;color:var(--text-dim);line-height:1.7;margin-bottom:12px">
-          Quando o cliente clica no botão do template, a Meta envia este JSON para o n8n:
-        </p>
-        <div class="json-box">
-          <div class="json-toolbar">
-            <div class="dots"><div class="dot-circle dot-red"></div><div class="dot-circle dot-yellow"></div><div class="dot-circle dot-green"></div></div>
-            <span>payload de entrada (Meta → n8n)</span>
-          </div>
-          <pre style="max-height:200px">{
-  <span class="tok-key">"entry"</span>: [{
-    <span class="tok-key">"changes"</span>: [{
-      <span class="tok-key">"value"</span>: {
-        <span class="tok-key">"metadata"</span>: {
-          <span class="tok-key">"phone_number_id"</span>: <span class="tok-str">"SEU_PHONE_NUMBER_ID"</span>
-        },
-        <span class="tok-key">"messages"</span>: [{
-          <span class="tok-key">"from"</span>: <span class="tok-str">"5548999999999"</span>,
-          <span class="tok-key">"type"</span>: <span class="tok-str">"button"</span>,
-          <span class="tok-key">"button"</span>: {
-            <span class="tok-key">"payload"</span>: <span class="tok-str">"saber_mais"</span>,
-            <span class="tok-key">"text"</span>: <span class="tok-str">"Saber mais"</span>
-          }
-        }]
-      }
-    }]
-  }]
-}</pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon green">4️⃣</div>
-          <div><h2>Ative o fluxo e teste</h2></div>
-        </div>
-        <p style="font-size:13px;color:var(--text-dim);line-height:1.7">
-          1. Ative o workflow no n8n (toggle no canto superior direito)<br>
-          2. Envie o template para o seu próprio número<br>
-          3. Clique no botão configurado<br>
-          4. Em segundos você deve receber a mensagem CTA com o botão clicável<br><br>
-          ⚠️ <strong style="color:var(--orange)">Atenção:</strong> O n8n precisa estar em uma URL pública com HTTPS para a Meta conseguir enviar os webhooks. Use ngrok para testes locais.
-        </p>
-      </div>
-
-    </div>
-  </div>
-
 </div>
 
-<div class="toast" id="toast">✅ Copiado!</div>
+<!-- ── CHAT ── -->
+<div class="pane active" id="pane-chat">
+  <div class="sidebar">
+    <div class="sh">
+      <span>Conversas</span>
+      <span class="cbadge" id="cntBadge">0</span>
+    </div>
+    <div class="sr"><input type="text" placeholder="Buscar..." oninput="filterC(this.value)"></div>
+    <div class="clist" id="clist">
+      <div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Carregando...</div>
+    </div>
+  </div>
+
+  <div class="chat-wrap">
+    <div class="no-conv" id="noConv">
+      <div class="ni">💬</div>
+      <p>Selecione uma conversa</p>
+    </div>
+    <div class="chat-hdr" id="chatHdr" style="display:none">
+      <div class="av g">👤</div>
+      <div class="ch-info">
+        <div class="ch-name" id="hdrName"></div>
+        <div class="ch-phone" id="hdrPhone"></div>
+      </div>
+    </div>
+    <div class="msgs" id="msgList" style="display:none"></div>
+    <div class="input-area" id="inputArea" style="display:none">
+      <div class="mtype-tabs">
+        <button class="mtt active" onclick="setMT('text',this)">💬 Texto</button>
+        <button class="mtt" onclick="setMT('cta',this)">🔗 Botão CTA</button>
+      </div>
+      <div class="cta-extra" id="ctaExtra">
+        <div><label>Texto do botão (máx 20 chars)</label><input type="text" id="ctaBtnT" maxlength="20" placeholder="Acessar agora"></div>
+        <div><label>URL do botão</label><input type="url" id="ctaBtnU" placeholder="https://seusite.com.br"></div>
+        <div><label>Header (opcional)</label><input type="text" id="ctaHdr" placeholder="Título"></div>
+        <div><label>Footer (opcional)</label><input type="text" id="ctaFtr" placeholder="Rodapé"></div>
+      </div>
+      <div class="irow">
+        <textarea id="msgIn" placeholder="Digite uma mensagem..." rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,110)+'px'"></textarea>
+        <button class="sbtn" onclick="sendMsg()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── AUTOMAÇÕES ── -->
+<div class="pane" id="pane-auto">
+  <div class="auto-hdr">
+    <div>
+      <h2>⚡ Automações</h2>
+      <p style="font-size:12px;color:#6b7a99;margin-top:3px">Quando o cliente mandar a palavra-chave, essa mensagem é enviada automaticamente</p>
+    </div>
+    <button class="btn bg" onclick="newAuto()">+ Nova automação</button>
+  </div>
+  <div class="auto-list" id="autoList">
+    <div style="text-align:center;color:#6b7a99;font-size:13px;padding:40px">Carregando automações...</div>
+  </div>
+</div>
+
+<!-- ── MONITOR ── -->
+<div class="pane" id="pane-mon">
+  <div class="mon-hdr">
+    <div style="display:flex;align-items:center;gap:10px">
+      <h2>📊 Monitor</h2>
+      <span class="badge" id="totBadge">0</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn bo" onclick="loadAll()">↻ Atualizar</button>
+      <button class="btn br" onclick="clearMsgs()">🗑 Limpar</button>
+    </div>
+  </div>
+  <div class="tw">
+    <div class="tbtop">
+      <input type="text" placeholder="Buscar..." oninput="filterM(this.value)">
+      <select onchange="filterM()" id="mfst">
+        <option value="">Todos</option>
+        <option value="recebido">Recebido</option>
+        <option value="respondido">Respondido</option>
+      </select>
+    </div>
+    <table>
+      <thead><tr><th>Telefone</th><th>Nome</th><th>Mensagem</th><th>Automação</th><th>Status</th><th>Recebido</th></tr></thead>
+      <tbody id="monTbl"><tr><td colspan="6"><div class="empty">Carregando...</div></td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal detalhe -->
+<div class="ov" id="ov" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="mo">
+    <h3>📲 Detalhe</h3>
+    <div class="mf"><div class="ml">Telefone</div><div class="mv" id="dPh"></div></div>
+    <div class="mf"><div class="ml">Nome</div><div class="mv" id="dNm"></div></div>
+    <div class="mf"><div class="ml">Mensagem</div><div class="mv" id="dBt"></div></div>
+    <div class="mf"><div class="ml">Automação ativada</div><div class="mv" id="dPl"></div></div>
+    <div class="mf"><div class="ml">Recebido em</div><div class="mv" id="dTm"></div></div>
+    <div class="ma">
+      <button class="btn bg" onclick="markDone()">✅ Marcar respondido</button>
+      <button class="btn bo" onclick="document.getElementById('ov').classList.remove('show')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-// -------------------------------------------------------
-// Estado
-// -------------------------------------------------------
-let jsonData = null;
+// ── CONFIG ─────────────────────────────────────────────────
+const SURL = 'https://ojgcddedmvuzealgbplq.supabase.co/rest/v1';
+const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qZ2NkZGVkbXZ1emVhbGdicGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMDE0MTQsImV4cCI6MjA5NDY3NzQxNH0.WGfc8sQTTxGk3K7098jCUczSIwAQ7j9SqLBUAWELu60';
+// ⚠️ Preencha suas credenciais Meta:
+const META_TOKEN   = localStorage.getItem('meta_token')   || '';
+const META_PHONE_ID = localStorage.getItem('meta_phone_id') || '';
 
-function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+const H = { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY, 'Content-Type': 'application/json' };
+const supa = async (path, opts={}) => {
+  const r = await fetch(SURL + path, { headers: H, ...opts });
+  const t = await r.text(); return t ? JSON.parse(t) : [];
+};
 
-function updateCount(inputId, counterId, max) {
-  const el = document.getElementById(inputId);
-  const counter = document.getElementById(counterId);
-  const len = el.value.length;
-  counter.textContent = `${len} / ${max}`;
-  counter.className = 'char-counter ' + (len > max * 0.9 ? (len >= max ? 'over' : 'warning') : 'ok');
+let allMsgs=[], allAutos=[], contacts={}, selPhone=null, selId=null, msgType='text', outbox={};
+
+// ── LOAD ───────────────────────────────────────────────────
+async function loadAll() {
+  try {
+    [allMsgs, allAutos] = await Promise.all([
+      supa('/mensagens?order=criado_em.desc&limit=500'),
+      supa('/automacoes?order=criado_em.asc')
+    ]);
+    setS(true);
+    buildContacts();
+    renderContacts();
+    renderAutos();
+    renderMonitor();
+    if (selPhone) renderChat(selPhone);
+  } catch(e) { setS(false); }
 }
 
-// -------------------------------------------------------
-// Update preview
-// -------------------------------------------------------
-function update() {
-  const header = val('ctaHeader');
-  const body   = val('ctaBody') || 'Configure a mensagem na aba Configuração →';
-  const footer = val('ctaFooter');
-  const btnTxt = val('btnText') || 'Texto do botão';
-
-  const prevHeader = document.getElementById('prev-header');
-  const prevBody   = document.getElementById('prev-body');
-  const prevFooter = document.getElementById('prev-footer');
-  const prevBtnTxt = document.getElementById('prev-btn-text');
-
-  prevHeader.textContent = header;
-  prevHeader.style.display = header ? 'block' : 'none';
-  prevBody.textContent = body.replace('{{NOME}}', 'João');
-  prevFooter.textContent = footer;
-  prevFooter.style.display = footer ? 'block' : 'none';
-  prevBtnTxt.textContent = btnTxt;
-
-  generateJSON();
+// ── CONTACTS ───────────────────────────────────────────────
+function buildContacts() {
+  contacts = {};
+  [...allMsgs].reverse().forEach(m => {
+    if (!m.telefone) return;
+    contacts[m.telefone] = {
+      nome: m.nome || m.telefone,
+      ultima: m.botao_texto || '—',
+      time: m.criado_em,
+      status: m.status,
+      id: m.id
+    };
+  });
+  document.getElementById('cntBadge').textContent = Object.keys(contacts).length;
 }
 
-// -------------------------------------------------------
-// Gera JSON do n8n
-// -------------------------------------------------------
-function generateJSON() {
-  const accessToken   = val('accessToken') || 'SEU_ACCESS_TOKEN_AQUI';
-  const phoneNumberId = val('phoneNumberId') || 'SEU_PHONE_NUMBER_ID';
-  const verifyToken   = val('verifyToken') || 'SEU_VERIFY_TOKEN';
-  const filterPayload = val('filterPayload');
-  const filterText    = val('filterText');
-  const filterType    = val('filterType') || 'both';
-  const ctaHeader     = val('ctaHeader');
-  const ctaBody       = val('ctaBody') || 'Olá, {{NOME}}! Clique no botão abaixo.';
-  const ctaFooter     = val('ctaFooter');
-  const btnText       = val('btnText') || 'Acessar agora';
-  const btnUrl        = val('btnUrl') || 'https://seusite.com.br';
+function renderContacts(f='') {
+  const phones = Object.keys(contacts).filter(p =>
+    !f || contacts[p].nome.toLowerCase().includes(f.toLowerCase()) || p.includes(f)
+  );
+  const el = document.getElementById('clist');
+  if (!phones.length) { el.innerHTML = '<div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Nenhum contato</div>'; return; }
+  el.innerHTML = phones.map(p => {
+    const c = contacts[p];
+    return `<div class="ci${p===selPhone?' sel':''}" onclick="selContact('${p}')">
+      <div class="av g">👤</div>
+      <div class="cinfo">
+        <div class="cname">${esc(c.nome)}</div>
+        <div class="cprev">${esc(c.ultima)}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+        <span class="ctime">${fdt(c.time)}</span>
+        ${c.status==='recebido'?'<span class="unr">!</span>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
 
-  // Monta filtro de tipo
-  let typeCondition = '';
-  if (filterType === 'button')      typeCondition = "messageType === 'button'";
-  else if (filterType === 'interactive') typeCondition = "messageType === 'interactive'";
-  else typeCondition = "(messageType === 'button' || (messageType === 'interactive' && message.interactive?.type === 'button_reply'))";
+function filterC(v) { renderContacts(v); }
 
-  // Filtro de payload
-  let payloadFilter = '';
-  if (filterPayload) {
-    payloadFilter = `\n// Filtra pelo payload específico do botão\nif (buttonPayload !== '${filterPayload}'`;
-    if (filterText) payloadFilter += ` && buttonText.toLowerCase() !== '${filterText.toLowerCase()}'`;
-    payloadFilter += `) {\n  return [{ json: { skip: true, reason: 'Payload não corresponde: ' + buttonPayload } }];\n}`;
-  } else if (filterText) {
-    payloadFilter = `\n// Filtra pelo texto do botão\nif (buttonText.toLowerCase() !== '${filterText.toLowerCase()}') {\n  return [{ json: { skip: true, reason: 'Texto não corresponde: ' + buttonText } }];\n}`;
+function selContact(phone) {
+  selPhone = phone;
+  selId = contacts[phone]?.id;
+  renderContacts();
+  document.getElementById('noConv').style.display   = 'none';
+  document.getElementById('chatHdr').style.display  = 'flex';
+  document.getElementById('msgList').style.display  = 'flex';
+  document.getElementById('inputArea').style.display = 'block';
+  document.getElementById('hdrName').textContent  = contacts[phone]?.nome || phone;
+  document.getElementById('hdrPhone').textContent = phone;
+  renderChat(phone);
+}
+
+// ── CHAT ───────────────────────────────────────────────────
+function renderChat(phone) {
+  const el = document.getElementById('msgList');
+  const recv = allMsgs.filter(m => m.telefone === phone).reverse()
+    .map(m => ({ dir:'in', text: m.botao_texto||'—', time: m.criado_em, type:'text' }));
+  const sent = (outbox[phone]||[]);
+  const all = [...recv, ...sent].sort((a,b) => new Date(a.time)-new Date(b.time));
+  if (!all.length) { el.innerHTML = '<div style="text-align:center;color:#6b7a99;font-size:12px;padding:20px">Nenhuma mensagem</div>'; return; }
+  el.innerHTML = all.map(m => `
+    <div class="msg ${m.dir}">
+      ${m.dir==='in'?`<div class="mfrom">👤 ${esc(contacts[phone]?.nome||phone)}</div>`:''}
+      <div class="bbl${m.type==='cta'?' cta':''}">
+        ${esc(m.text)}
+        ${m.type==='cta'?`<div class="cta-pb">🔗 ${esc(m.btnText||'Botão')}</div>`:''}
+      </div>
+      <div class="mtime">${fdtFull(m.time)}</div>
+    </div>`).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+// ── ENVIAR ─────────────────────────────────────────────────
+async function sendMsg() {
+  if (!selPhone) return toast('Selecione um contato');
+  const text = document.getElementById('msgIn').value.trim();
+  if (!text) return;
+  const token = localStorage.getItem('meta_token');
+  const phoneId = localStorage.getItem('meta_phone_id');
+  if (!token || !phoneId) return toast('⚠️ Configure o Token e Phone ID na aba Automações → Configurações');
+  try {
+    if (msgType === 'cta') await sendCTA(text, token, phoneId);
+    else await sendText(text, token, phoneId);
+  } catch(e) { toast('❌ ' + e.message); }
+}
+
+async function sendText(text, token, phoneId) {
+  await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'text', text:{ body:text } }, token, phoneId);
+  if (!outbox[selPhone]) outbox[selPhone]=[];
+  outbox[selPhone].push({ dir:'out', text, time:new Date().toISOString(), type:'text' });
+  document.getElementById('msgIn').value='';
+  renderChat(selPhone); toast('✅ Enviado!');
+}
+
+async function sendCTA(bodyText, token, phoneId) {
+  const btnT = document.getElementById('ctaBtnT').value.trim();
+  const btnU = document.getElementById('ctaBtnU').value.trim();
+  const hdr  = document.getElementById('ctaHdr').value.trim();
+  const ftr  = document.getElementById('ctaFtr').value.trim();
+  if (!btnT||!btnU) return toast('Preencha texto e URL do botão');
+  const interactive = { type:'cta_url', body:{text:bodyText}, action:{name:'cta_url',parameters:{display_text:btnT.substring(0,20),url:btnU}} };
+  if (hdr) interactive.header = { type:'text', text:hdr };
+  if (ftr) interactive.footer = { text:ftr };
+  await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'interactive', interactive }, token, phoneId);
+  if (!outbox[selPhone]) outbox[selPhone]=[];
+  outbox[selPhone].push({ dir:'out', text:bodyText, time:new Date().toISOString(), type:'cta', btnText:btnT });
+  document.getElementById('msgIn').value='';
+  renderChat(selPhone); toast('✅ CTA enviado!');
+}
+
+async function metaPost(body, token, phoneId) {
+  const r = await fetch(`https://graph.facebook.com/v21.0/${phoneId}/messages`, {
+    method:'POST', headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'}, body:JSON.stringify(body)
+  });
+  if (!r.ok) { const e=await r.json(); throw new Error(e?.error?.message||r.status); }
+  return r.json();
+}
+
+function setMT(t, btn) {
+  msgType=t;
+  document.querySelectorAll('.mtt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ctaExtra').classList.toggle('show', t==='cta');
+}
+
+// ── AUTOMAÇÕES ─────────────────────────────────────────────
+function renderAutos() {
+  const el = document.getElementById('autoList');
+
+  // Card de configurações globais (Meta)
+  const metaToken   = localStorage.getItem('meta_token')||'';
+  const metaPhoneId = localStorage.getItem('meta_phone_id')||'';
+
+  const settingsCard = `
+  <div class="auto-card" style="border-color:rgba(59,130,246,.3)">
+    <div class="ac-hdr" onclick="toggleCard('settings-body')">
+      <div class="ac-icon">🔑</div>
+      <div class="ac-info">
+        <div class="ac-name">Configurações Meta API</div>
+        <div class="ac-desc">Access Token e Phone Number ID para envio</div>
+      </div>
+      <span style="color:#6b7a99;font-size:12px">▼</span>
+    </div>
+    <div class="ac-body" id="settings-body">
+      <div class="field-grid">
+        <div class="field full">
+          <label>Access Token</label>
+          <input type="password" id="metaTokenInput" value="${metaToken}" placeholder="EAAxxxxxxx">
+        </div>
+        <div class="field full">
+          <label>Phone Number ID</label>
+          <input type="text" id="metaPhoneInput" value="${metaPhoneId}" placeholder="123456789012345">
+        </div>
+      </div>
+      <div class="ac-actions">
+        <button class="btn bg" onclick="saveMetaConfig()">💾 Salvar</button>
+      </div>
+    </div>
+  </div>`;
+
+  if (!allAutos.length) {
+    el.innerHTML = settingsCard + `<div style="text-align:center;color:#6b7a99;font-size:13px;padding:30px">
+      Nenhuma automação criada.<br><button class="btn bg" style="margin-top:12px" onclick="newAuto()">+ Criar primeira automação</button>
+    </div>`;
+    return;
   }
 
-  const flow = {
-    name: "WhatsApp — Recebe Botão Template → Envia CTA URL",
-    nodes: [
-      {
-        parameters: {
-          httpMethod: "GET",
-          path: "whatsapp-meta-webhook",
-          responseMode: "responseNode",
-          options: {}
-        },
-        id: "node-webhook-verify",
-        name: "Webhook Meta (GET — Verificação)",
-        type: "n8n-nodes-base.webhook",
-        typeVersion: 2,
-        position: [200, 140],
-        webhookId: "meta-whatsapp-verify"
-      },
-      {
-        parameters: {
-          respondWith: "text",
-          responseBody: "={{ $json.query['hub.challenge'] }}",
-          options: { responseCode: 200 }
-        },
-        id: "node-verify-response",
-        name: "Responde Verificação Meta",
-        type: "n8n-nodes-base.respondToWebhook",
-        typeVersion: 1,
-        position: [440, 140]
-      },
-      {
-        parameters: {
-          httpMethod: "POST",
-          path: "whatsapp-meta-webhook",
-          responseMode: "responseNode",
-          options: {}
-        },
-        id: "node-webhook",
-        name: "Webhook Meta (POST)",
-        type: "n8n-nodes-base.webhook",
-        typeVersion: 2,
-        position: [200, 320],
-        webhookId: "meta-whatsapp-inbound"
-      },
-      {
-        parameters: {
-          jsCode: `// Extrai dados do payload da Meta\nconst body = $input.first().json.body;\nconst entry = body?.entry?.[0];\nconst change = entry?.changes?.[0]?.value;\nconst message = change?.messages?.[0];\nconst contact = change?.contacts?.[0];\nconst metadata = change?.metadata;\n\nif (!message) return [{ json: { skip: true, reason: 'Sem mensagem no payload' } }];\n\nconst messageType = message.type;\n\n// Verifica se é clique de botão\nconst isOk = ${typeCondition};\nif (!isOk) return [{ json: { skip: true, reason: 'Tipo: ' + messageType } }];\n\nlet buttonPayload = '';\nlet buttonText = '';\n\nif (messageType === 'button') {\n  buttonPayload = message.button?.payload || '';\n  buttonText   = message.button?.text || '';\n} else {\n  buttonPayload = message.interactive?.button_reply?.id || '';\n  buttonText   = message.interactive?.button_reply?.title || '';\n}\n${payloadFilter}\n\nreturn [{ json: {\n  skip: false,\n  fromPhone: message.from,\n  phoneNumberId: metadata?.phone_number_id || '${phoneNumberId}',\n  contactName: contact?.profile?.name || 'Cliente',\n  buttonPayload,\n  buttonText\n} }];\n`
-        },
-        id: "node-parse",
-        name: "Parsear Payload da Meta",
-        type: "n8n-nodes-base.code",
-        typeVersion: 2,
-        position: [440, 320]
-      },
-      {
-        parameters: {
-          conditions: {
-            options: { caseSensitive: false },
-            conditions: [
-              {
-                id: "cond-skip",
-                leftValue: "={{ $json.skip }}",
-                rightValue: false,
-                operator: { type: "boolean", operation: "equals" }
-              }
-            ],
-            combinator: "and"
-          }
-        },
-        id: "node-filter",
-        name: "É clique de botão?",
-        type: "n8n-nodes-base.if",
-        typeVersion: 2,
-        position: [680, 320]
-      },
-      {
-        parameters: {
-          respondWith: "json",
-          responseBody: '{ "status": "ok" }',
-          options: { responseCode: 200 }
-        },
-        id: "node-ack",
-        name: "Responde 200 OK (Meta)",
-        type: "n8n-nodes-base.respondToWebhook",
-        typeVersion: 1,
-        position: [920, 220]
-      },
-      {
-        parameters: {
-          jsCode: `const fromPhone    = $json.fromPhone;\nconst phoneNumberId = $json.phoneNumberId;\nconst contactName  = $json.contactName;\n\nconst bodyText = \`${ctaBody}\`.replace('{{NOME}}', contactName);\n\nconst payload = {\n  messaging_product: 'whatsapp',\n  recipient_type: 'individual',\n  to: fromPhone,\n  type: 'interactive',\n  interactive: {\n    type: 'cta_url',\n    ${ctaHeader ? `header: { type: 'text', text: '${ctaHeader}' },\n    ` : ''}body: { text: bodyText },\n    ${ctaFooter ? `footer: { text: '${ctaFooter}' },\n    ` : ''}action: {\n      name: 'cta_url',\n      parameters: {\n        display_text: '${btnText.substring(0,20)}',\n        url: '${btnUrl}'\n      }\n    }\n  }\n};\n\nreturn [{ json: { phoneNumberId, accessToken: '${accessToken}', payload } }];\n`
-        },
-        id: "node-build-cta",
-        name: "Montar Mensagem CTA",
-        type: "n8n-nodes-base.code",
-        typeVersion: 2,
-        position: [920, 400]
-      },
-      {
-        parameters: {
-          method: "POST",
-          url: "=https://graph.facebook.com/v21.0/{{ $json.phoneNumberId }}/messages",
-          sendHeaders: true,
-          headerParameters: {
-            parameters: [
-              { name: "Authorization", value: "=Bearer {{ $json.accessToken }}" },
-              { name: "Content-Type",  value: "application/json" }
-            ]
-          },
-          sendBody: true,
-          specifyBody: "json",
-          jsonBody: "={{ JSON.stringify($json.payload) }}",
-          options: { response: { response: { fullResponse: true } } }
-        },
-        id: "node-send-meta",
-        name: "Enviar CTA via Meta API",
-        type: "n8n-nodes-base.httpRequest",
-        typeVersion: 4.2,
-        position: [1160, 400]
-      },
-      {
-        parameters: {
-          jsCode: `const resp = $input.first().json;\nconst status = resp.statusCode || 200;\nconst body = resp.body || resp;\nif (status === 200 || body?.messages?.[0]?.id) {\n  return [{ json: { success: true, messageId: body?.messages?.[0]?.id } }];\n} else {\n  return [{ json: { success: false, error: body } }];\n}\n`
-        },
-        id: "node-log",
-        name: "Log Resultado",
-        type: "n8n-nodes-base.code",
-        typeVersion: 2,
-        position: [1400, 400]
-      }
-    ],
-    connections: {
-      "Webhook Meta (GET — Verificação)": { main: [[{ node: "Responde Verificação Meta", type: "main", index: 0 }]] },
-      "Webhook Meta (POST)": { main: [[{ node: "Parsear Payload da Meta", type: "main", index: 0 }]] },
-      "Parsear Payload da Meta": { main: [[{ node: "É clique de botão?", type: "main", index: 0 }]] },
-      "É clique de botão?": { main: [
-        [{ node: "Responde 200 OK (Meta)", type: "main", index: 0 }, { node: "Montar Mensagem CTA", type: "main", index: 0 }],
-        []
-      ]},
-      "Montar Mensagem CTA": { main: [[{ node: "Enviar CTA via Meta API", type: "main", index: 0 }]] },
-      "Enviar CTA via Meta API": { main: [[{ node: "Log Resultado", type: "main", index: 0 }]] }
-    },
-    settings: { executionOrder: "v1" },
-    tags: ["whatsapp", "meta", "cta", "automacao"]
+  el.innerHTML = settingsCard + allAutos.map(a => buildAutoCard(a)).join('');
+}
+
+function buildAutoCard(a) {
+  const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
+  const enabled = a.ativo;
+  return `
+  <div class="auto-card${enabled?' enabled':''}" id="acard-${a.id}">
+    <div class="ac-hdr" onclick="toggleCard('abody-${a.id}')">
+      <div class="ac-icon">${enabled?'⚡':'⏸'}</div>
+      <div class="ac-info">
+        <div class="ac-name">${esc(a.nome||'Sem nome')}</div>
+        <div class="ac-desc">Gatilho: ${kws.map(k=>`<b style="color:#25d366">${esc(k)}</b>`).join(', ')||'—'}</div>
+      </div>
+      <label class="toggle" onclick="event.stopPropagation()">
+        <input type="checkbox" ${enabled?'checked':''} onchange="toggleAuto('${a.id}', this.checked)">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </label>
+    </div>
+    <div class="ac-body" id="abody-${a.id}">
+      <div class="field-grid">
+        <div class="field full">
+          <label>Nome da automação</label>
+          <input type="text" id="aname-${a.id}" value="${esc(a.nome||'')}">
+        </div>
+        <div class="field full">
+          <label>Palavras-chave que ativam (separadas por vírgula)</label>
+          <div class="kw-wrap" id="kwwrap-${a.id}">
+            ${kws.map(k=>`<span class="kw-tag">${esc(k)}<button onclick="removeKw('${a.id}','${k}')">×</button></span>`).join('')}
+          </div>
+          <div class="kw-input-row">
+            <input type="text" id="kwinput-${a.id}" placeholder="Ex: saber mais, quero comprar" onkeydown="if(event.key==='Enter'){addKw('${a.id}');event.preventDefault()}">
+            <button class="btn bo" onclick="addKw('${a.id}')">+ Add</button>
+          </div>
+          <div class="info-tag">ℹ️ Se o cliente digitar ou clicar em qualquer uma dessas palavras, a automação dispara</div>
+        </div>
+        <div class="field full">
+          <label>Corpo da mensagem <span style="color:#6b7a99">(use {nome} para personalizar)</span></label>
+          <textarea id="abody2-${a.id}" rows="3" onkeyup="prevUpdate('${a.id}')">${esc(a.mensagem_corpo||'')}</textarea>
+        </div>
+        <div class="field">
+          <label>Header (opcional)</label>
+          <input type="text" id="ahdr-${a.id}" value="${esc(a.mensagem_header||'')}" onkeyup="prevUpdate('${a.id}')">
+        </div>
+        <div class="field">
+          <label>Footer (opcional)</label>
+          <input type="text" id="aftr-${a.id}" value="${esc(a.mensagem_footer||'')}" onkeyup="prevUpdate('${a.id}')">
+        </div>
+        <div class="field">
+          <label>Texto do botão (máx 20 chars)</label>
+          <input type="text" id="abtnT-${a.id}" value="${esc(a.botao_texto||'')}" maxlength="20" onkeyup="prevUpdate('${a.id}')">
+        </div>
+        <div class="field">
+          <label>URL do botão</label>
+          <input type="url" id="abtnU-${a.id}" value="${esc(a.botao_url||'')}" onkeyup="prevUpdate('${a.id}')">
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div style="margin-top:14px">
+        <div style="font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Preview da mensagem</div>
+        <div class="preview-box">
+          <div class="prev-bbl">
+            <div class="prev-hdr" id="prevHdr-${a.id}">${esc(a.mensagem_header||'')}</div>
+            <div class="prev-body" id="prevBody-${a.id}">${esc((a.mensagem_corpo||'').replace('{nome}','João'))}</div>
+            <div class="prev-ftr" id="prevFtr-${a.id}">${esc(a.mensagem_footer||'')}</div>
+            <div class="prev-btn" id="prevBtn-${a.id}">🔗 ${esc(a.botao_texto||'Botão')}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ac-actions">
+        <button class="btn bg" onclick="saveAuto('${a.id}')">💾 Salvar</button>
+        <button class="btn br" onclick="deleteAuto('${a.id}')">🗑 Excluir</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+function prevUpdate(id) {
+  const g = i => (document.getElementById(i)||{}).value||'';
+  document.getElementById('prevHdr-'+id).textContent  = g('ahdr-'+id);
+  document.getElementById('prevBody-'+id).textContent = g('abody2-'+id).replace('{nome}','João');
+  document.getElementById('prevFtr-'+id).textContent  = g('aftr-'+id);
+  document.getElementById('prevBtn-'+id).textContent  = '🔗 '+(g('abtnT-'+id)||'Botão');
+}
+
+function addKw(id) {
+  const input = document.getElementById('kwinput-'+id);
+  const val = input.value.trim();
+  if (!val) return;
+  const a = allAutos.find(x=>x.id===id);
+  if (!a) return;
+  const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
+  if (!kws.includes(val)) kws.push(val);
+  a.palavras_chave = kws.join(', ');
+  document.getElementById('kwinput-'+id).value='';
+  // Re-render keywords only
+  const wrap = document.getElementById('kwwrap-'+id);
+  wrap.innerHTML = kws.map(k=>`<span class="kw-tag">${esc(k)}<button onclick="removeKw('${id}','${k}')">×</button></span>`).join('');
+}
+
+function removeKw(id, kw) {
+  const a = allAutos.find(x=>x.id===id);
+  if (!a) return;
+  const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(k=>k&&k!==kw);
+  a.palavras_chave = kws.join(', ');
+  const wrap = document.getElementById('kwwrap-'+id);
+  wrap.innerHTML = kws.map(k=>`<span class="kw-tag">${esc(k)}<button onclick="removeKw('${id}','${k}')">×</button></span>`).join('');
+}
+
+async function toggleAuto(id, val) {
+  await supa('/automacoes?id=eq.'+id, { method:'PATCH', body:JSON.stringify({ ativo:val }) });
+  const a = allAutos.find(x=>x.id===id);
+  if (a) a.ativo = val;
+  const card = document.getElementById('acard-'+id);
+  if (card) card.classList.toggle('enabled', val);
+  toast(val ? '✅ Automação ativada' : '⏸ Automação pausada');
+}
+
+async function saveAuto(id) {
+  const g = i => (document.getElementById(i)||{}).value||'';
+  const a = allAutos.find(x=>x.id===id);
+  const kws = a?.palavras_chave || '';
+  const data = {
+    nome:             g('aname-'+id),
+    palavras_chave:   kws,
+    mensagem_corpo:   g('abody2-'+id),
+    mensagem_header:  g('ahdr-'+id),
+    mensagem_footer:  g('aftr-'+id),
+    botao_texto:      g('abtnT-'+id),
+    botao_url:        g('abtnU-'+id),
+    access_token:     localStorage.getItem('meta_token')||'',
   };
-
-  jsonData = flow;
-
-  // Renderiza com syntax highlight
-  const rendered = syntaxHighlight(JSON.stringify(flow, null, 2));
-  document.getElementById('jsonOutput').innerHTML = rendered;
+  await supa('/automacoes?id=eq.'+id, { method:'PATCH', body:JSON.stringify(data) });
+  toast('✅ Automação salva!');
+  loadAll();
 }
 
-function syntaxHighlight(json) {
-  return json
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
-      if (/^"/.test(m)) {
-        if (/:$/.test(m)) return `<span class="tok-key">${m}</span>`;
-        return `<span class="tok-str">${m}</span>`;
-      }
-      if (/true|false/.test(m)) return `<span class="tok-bool">${m}</span>`;
-      if (/null/.test(m)) return `<span class="tok-null">${m}</span>`;
-      return `<span class="tok-num">${m}</span>`;
-    });
+async function deleteAuto(id) {
+  if (!confirm('Excluir esta automação?')) return;
+  await supa('/automacoes?id=eq.'+id, { method:'DELETE' });
+  toast('🗑 Excluída'); loadAll();
 }
 
-function generateAndCopy() {
-  generateJSON();
-  copyJSON();
-  switchTab('json');
+async function newAuto() {
+  const data = {
+    nome: 'Nova automação',
+    palavras_chave: 'saber mais',
+    mensagem_corpo: 'Olá, {nome}! Clique no botão abaixo para saber mais.',
+    mensagem_header: '',
+    mensagem_footer: 'Respondemos em até 2h.',
+    botao_texto: 'Acessar agora',
+    botao_url: 'https://seusite.com.br',
+    ativo: false,
+    access_token: localStorage.getItem('meta_token')||''
+  };
+  await supa('/automacoes', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(data) });
+  toast('✅ Automação criada! Configure abaixo.');
+  await loadAll();
+  sw('auto');
+  // Abre o card da última criada
+  const last = allAutos[allAutos.length-1];
+  if (last) toggleCard('abody-'+last.id);
 }
 
-function copyJSON() {
-  if (!jsonData) { generateJSON(); }
-  navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2)).then(() => {
-    showToast('✅ JSON copiado! Cole no n8n → Import from JSON');
+function saveMetaConfig() {
+  const token = document.getElementById('metaTokenInput').value.trim();
+  const phone = document.getElementById('metaPhoneInput').value.trim();
+  localStorage.setItem('meta_token', token);
+  localStorage.setItem('meta_phone_id', phone);
+  toast('✅ Credenciais salvas!');
+}
+
+// ── MONITOR ───────────────────────────────────────────────
+let monMsgs = [];
+function renderMonitor() {
+  monMsgs = [...allMsgs];
+  filterM();
+  document.getElementById('totBadge').textContent = allMsgs.length;
+}
+
+function filterM(v) {
+  const q = v !== undefined ? v : (document.querySelector('#pane-mon input')||{value:''}).value.toLowerCase();
+  const s = (document.getElementById('mfst')||{}).value||'';
+  const list = monMsgs.filter(m => {
+    const mq = !q || (m.telefone||'').includes(q) || (m.nome||'').toLowerCase().includes(q);
+    const ms = !s || m.status===s;
+    return mq && ms;
   });
+  const tb = document.getElementById('monTbl');
+  if (!list.length) { tb.innerHTML='<tr><td colspan="6"><div class="empty">Nenhuma mensagem</div></td></tr>'; return; }
+  tb.innerHTML = list.map(m => `<tr onclick="openMon('${m.id}')">
+    <td><span class="pc">${esc(m.telefone||'—')}</span></td>
+    <td>${esc(m.nome||'—')}</td>
+    <td>${esc(m.botao_texto||'—')}</td>
+    <td style="color:#25d366;font-size:11px">${esc(m.botao_payload||'—')}</td>
+    <td><span class="sp ${m.status||'recebido'}">${m.status==='respondido'?'✅':'📩 '+(m.status||'recebido')}</span></td>
+    <td style="color:#6b7a99;font-size:11px;font-family:monospace">${fdtFull(m.criado_em)}</td>
+  </tr>`).join('');
 }
 
-function downloadJSON() {
-  if (!jsonData) generateJSON();
-  const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'n8n_whatsapp_cta_flow.json';
-  a.click();
+function openMon(id) {
+  const m = allMsgs.find(x=>x.id===id); if(!m) return;
+  selId = id;
+  document.getElementById('dPh').textContent = m.telefone||'—';
+  document.getElementById('dNm').textContent = m.nome||'—';
+  document.getElementById('dBt').textContent = m.botao_texto||'—';
+  document.getElementById('dPl').textContent = m.botao_payload||'—';
+  document.getElementById('dTm').textContent = fdtFull(m.criado_em);
+  document.getElementById('ov').classList.add('show');
 }
 
-function clearAll() {
-  ['accessToken','phoneNumberId','verifyToken','filterPayload','filterText',
-   'ctaHeader','ctaBody','ctaFooter','btnText','btnUrl'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('filterType').value = 'both';
-  ['ctaHeaderCount','ctaBodyCount','ctaFooterCount','btnTextCount'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.textContent = '0 / ' + el.textContent.split('/')[1].trim(); el.className = 'char-counter ok'; }
-  });
-  update();
+async function markDone() {
+  if (!selId) return;
+  await supa('/mensagens?id=eq.'+selId, { method:'PATCH', body:JSON.stringify({status:'respondido'}) });
+  toast('✅ Marcado'); document.getElementById('ov').classList.remove('show'); loadAll();
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+async function clearMsgs() {
+  if (!confirm('Apagar todas as mensagens?')) return;
+  await supa('/mensagens?id=neq.00000000-0000-0000-0000-000000000000', { method:'DELETE' });
+  toast('🗑 Apagado'); loadAll();
 }
 
-function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach((b, i) => {
-    const names = ['config','preview','json','guide'];
-    b.classList.toggle('active', names[i] === name);
-  });
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  if (name === 'preview' || name === 'json') update();
+// ── UTILS ─────────────────────────────────────────────────
+function sw(n) {
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['chat','auto','mon'][i]===n));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pane-'+n).classList.add('active');
 }
 
-// Init
-update();
+function setS(ok) {
+  document.getElementById('sDot').className='sdot'+(ok?' on':'');
+  document.getElementById('sTxt').textContent=ok?'Supabase online':'Sem conexão';
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function fdt(iso) {
+  if (!iso) return '—';
+  const d=new Date(iso), now=new Date(), diff=now-d;
+  if (diff<60000) return 'agora';
+  if (diff<3600000) return Math.floor(diff/60000)+'m';
+  if (diff<86400000) return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  return d.toLocaleDateString('pt-BR');
+}
+
+function fdtFull(iso) {
+  if (!iso) return '—';
+  const d=new Date(iso);
+  return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function toast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ── INIT ──────────────────────────────────────────────────
+loadAll();
+setInterval(loadAll, 7000);
 </script>
 </body>
 </html>
