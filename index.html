@@ -604,12 +604,14 @@ function renderKws(id) {
 
 function addKw(id) {
   const input = document.getElementById('kwinput-'+id);
-  const val = input.value.trim().toLowerCase();
+  const val = input.value.trim();
   if (!val) return;
   const a = allAutos.find(x=>x.id===id);
   if (!a) return;
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
-  if (!kws.includes(val)) kws.push(val);
+  const valLower = val.toLowerCase();
+  // Verifica duplicata ignorando maiúsculas
+  if (!kws.map(k=>k.toLowerCase()).includes(valLower)) kws.push(valLower);
   a.palavras_chave = kws.join(', ');
   input.value = '';
   input.focus();
@@ -779,4 +781,4 @@ loadAll();
 setInterval(loadAll, 7000);
 </script>
 </body>
-</html> 
+</html>
