@@ -309,8 +309,9 @@ const supa = async (path, opts={}) => {
 let allMsgs=[], allAutos=[], contacts={}, selPhone=null, selId=null, msgType='text', outbox={};
 
 // ── LOAD ───────────────────────────────────────────────────
-async function loadAll() {
+async function loadAll(force=false) {
   try {
+    const abaAtiva = document.querySelector('.pane.active')?.id;
     [allMsgs, allAutos] = await Promise.all([
       supa('/mensagens?order=criado_em.desc&limit=500'),
       supa('/automacoes?order=criado_em.asc')
@@ -318,7 +319,8 @@ async function loadAll() {
     setS(true);
     buildContacts();
     renderContacts();
-    renderAutos();
+    // Só re-renderiza automações se for chamada explícita (force) ou se não estiver na aba auto
+    if (force || abaAtiva !== 'pane-auto') renderAutos();
     renderMonitor();
     if (selPhone) renderChat(selPhone);
   } catch(e) { setS(false); }
@@ -460,7 +462,7 @@ function renderAutos() {
 
   const settingsCard = `
   <div class="auto-card" style="border-color:rgba(59,130,246,.3)">
-    <div class="ac-hdr" onclick="toggleCard('settings-body')">
+    <div class="ac-hdr" onclick="toggleCard('settings-body', event)">
       <div class="ac-icon">🔑</div>
       <div class="ac-info">
         <div class="ac-name">Configurações Meta API</div>
@@ -468,7 +470,7 @@ function renderAutos() {
       </div>
       <span style="color:#6b7a99;font-size:12px">▼</span>
     </div>
-    <div class="ac-body" id="settings-body">
+    <div class="ac-body open" id="settings-body">
       <div class="field-grid">
         <div class="field full">
           <label>Access Token</label>
@@ -500,7 +502,7 @@ function buildAutoCard(a) {
   const enabled = a.ativo;
   return `
   <div class="auto-card${enabled?' enabled':''}" id="acard-${a.id}">
-    <div class="ac-hdr" onclick="toggleCard('abody-${a.id}')">
+    <div class="ac-hdr" onclick="toggleCard('abody-${a.id}', event)">
       <div class="ac-icon">${enabled?'⚡':'⏸'}</div>
       <div class="ac-info">
         <div class="ac-name">${esc(a.nome||'Sem nome')}</div>
@@ -572,9 +574,13 @@ function buildAutoCard(a) {
   </div>`;
 }
 
-function toggleCard(id) {
+function toggleCard(id, e) {
+  if (e) e.stopPropagation();
   const el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
+  if (!el) return;
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.ac-body').forEach(b => b.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
 }
 
 function prevUpdate(id) {
@@ -634,13 +640,13 @@ async function saveAuto(id) {
   };
   await supa('/automacoes?id=eq.'+id, { method:'PATCH', body:JSON.stringify(data) });
   toast('✅ Automação salva!');
-  loadAll();
+  loadAll(true);
 }
 
 async function deleteAuto(id) {
   if (!confirm('Excluir esta automação?')) return;
   await supa('/automacoes?id=eq.'+id, { method:'DELETE' });
-  toast('🗑 Excluída'); loadAll();
+  toast('🗑 Excluída'); loadAll(true);
 }
 
 async function newAuto() {
@@ -657,11 +663,11 @@ async function newAuto() {
   };
   await supa('/automacoes', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(data) });
   toast('✅ Automação criada! Configure abaixo.');
-  await loadAll();
+  await loadAll(true);
   sw('auto');
   // Abre o card da última criada
   const last = allAutos[allAutos.length-1];
-  if (last) toggleCard('abody-'+last.id);
+  if (last) { document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open')); const el = document.getElementById('abody-'+last.id); if(el) el.classList.add('open'); }
 }
 
 function saveMetaConfig() {
