@@ -1,0 +1,12 @@
+{
+  "name": "whatsapp-cta-n8n",
+  "version": "1.0.0",
+  "description": "Automação n8n: clique no botão do template WhatsApp → responde com mensagem CTA",
+  "scripts": {
+    "build": "echo ok"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
