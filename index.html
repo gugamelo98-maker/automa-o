@@ -25,7 +25,7 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 #pane-auto{flex-direction:column;overflow-y:auto;padding:20px}
 #pane-mon{flex-direction:column;overflow-y:auto;padding:20px}
 
-/* ── CHAT ── */
+/* CHAT */
 #pane-chat{flex-direction:row}
 .sidebar{width:280px;border-right:1px solid #1e2a42;display:flex;flex-direction:column;background:#0d1120;flex-shrink:0}
 .sh{padding:12px 14px;border-bottom:1px solid #1e2a42;display:flex;align-items:center;justify-content:space-between}
@@ -62,14 +62,14 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .mtime{font-size:10px;color:#6b7a99;margin-top:2px;padding:0 2px}
 .msg.out .mtime{text-align:right}
 .mfrom{font-size:10px;color:#6b7a99;margin-bottom:1px;padding:0 2px}
-.no-conv{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#374151}
+.no-conv{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px}
 .no-conv .ni{font-size:44px}
 .no-conv p{font-size:13px;color:#6b7a99}
 .input-area{padding:10px 14px;border-top:1px solid #1e2a42;background:#10141f;flex-shrink:0}
 .mtype-tabs{display:flex;gap:5px;margin-bottom:8px}
 .mtt{padding:4px 11px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #1e2a42;background:#161c2d;color:#6b7a99;transition:all .15s}
 .mtt.active{background:rgba(37,211,102,.1);color:#25d366;border-color:rgba(37,211,102,.3)}
-.cta-extra{background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:10px;margin-bottom:8px;display:none;gap:6px;flex-direction:column}
+.cta-extra{background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:10px;margin-bottom:8px;display:none;flex-direction:column;gap:6px}
 .cta-extra.show{display:flex}
 .cta-extra input{background:#0a0d14;border:1px solid #1e2a42;border-radius:6px;color:#e8edf5;font-size:12px;padding:6px 9px;outline:none;font-family:monospace;width:100%}
 .cta-extra input:focus{border-color:#25d366}
@@ -81,13 +81,13 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .sbtn:hover{background:#20c55e}
 .sbtn svg{width:17px;height:17px;fill:#000}
 
-/* ── AUTOMAÇÕES ── */
+/* AUTOMAÇÕES */
 .auto-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
 .auto-hdr h2{font-size:15px;font-weight:700}
 .auto-list{display:flex;flex-direction:column;gap:12px}
 .auto-card{background:#10141f;border:1px solid #1e2a42;border-radius:12px;overflow:hidden;transition:border-color .2s}
 .auto-card.enabled{border-color:rgba(37,211,102,.3)}
-.ac-hdr{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer}
+.ac-hdr{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
 .ac-icon{width:36px;height:36px;border-radius:8px;background:#161c2d;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .ac-info{flex:1}
 .ac-name{font-size:13px;font-weight:700}
@@ -101,30 +101,30 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .ac-body{display:none;padding:0 18px 18px;border-top:1px solid #1e2a42}
 .ac-body.open{display:block}
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-@media(max-width:640px){.field-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.field-grid{grid-column:1fr}}
 .field{display:flex;flex-direction:column;gap:4px}
 .field.full{grid-column:1/-1}
 .field label{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px}
-.field input,.field textarea,.field select{background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:8px 10px;outline:none;font-family:monospace;width:100%}
+.field input,.field textarea{background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:8px 10px;outline:none;width:100%}
 .field input:focus,.field textarea:focus{border-color:#25d366}
 .field textarea{resize:vertical;font-family:inherit;font-size:13px}
-.kw-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;min-height:32px;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;padding:6px 8px;align-items:center}
+.kw-wrap{display:flex;flex-wrap:wrap;gap:6px;min-height:36px;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;padding:6px 8px;align-items:center}
 .kw-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
-.kw-tag button{background:none;border:none;color:#25d366;cursor:pointer;font-size:13px;line-height:1;padding:0}
+.kw-tag button{background:none;border:none;color:#25d366;cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 2px}
 .kw-input-row{display:flex;gap:6px;margin-top:8px}
-.kw-input-row input{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none;font-family:monospace}
+.kw-input-row input{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:7px 10px;outline:none;font-family:monospace}
 .kw-input-row input:focus{border-color:#25d366}
 .ac-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .preview-box{background:#111b21;border-radius:12px;padding:14px;margin-top:12px;max-width:280px}
-.prev-bbl{background:#1f2c34;border-radius:4px 12px 12px 12px;padding:8px 12px 0;font-size:12px;line-height:1.5}
+.prev-bbl{background:#1f2c34;border-radius:4px 12px 12px 12px;padding:8px 12px 0}
 .prev-hdr{font-weight:700;font-size:12px;color:#e9edef;margin-bottom:4px}
-.prev-body{color:#d1d7db;margin-bottom:4px;word-break:break-word}
+.prev-body{font-size:12px;color:#d1d7db;margin-bottom:4px;word-break:break-word;line-height:1.5}
 .prev-ftr{font-size:10px;color:#8696a0;margin-bottom:6px}
 .prev-btn{border-top:1px solid #2a3942;padding:7px 0;color:#00a884;font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px}
-.info-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#60a5fa;padding:6px 12px;border-radius:8px;font-size:11px;margin-top:10px}
+.info-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#60a5fa;padding:6px 12px;border-radius:8px;font-size:11px;margin-top:8px}
 
-/* ── MONITOR ── */
-.mon-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
+/* MONITOR */
+.mon-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .mon-hdr h2{font-size:15px;font-weight:700}
 .badge{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2)}
 .tw{background:#10141f;border:1px solid #1e2a42;border-radius:12px;overflow:hidden}
@@ -144,18 +144,17 @@ tbody td{padding:11px 14px;font-size:12px}
 .sp.respondido{background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2)}
 .empty{text-align:center;padding:40px;color:#6b7a99;font-size:12px}
 
-/* ── UTILS ── */
+/* UTILS */
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
 .bo{background:transparent;color:#6b7a99;border:1px solid #1e2a42}.bo:hover{color:#e8edf5;border-color:#6b7a99}
 .bg{background:#25d366;color:#000}.bg:hover{background:#20c55e}
 .br{background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.2)}.br:hover{background:rgba(239,68,68,.15)}
-.bb{background:rgba(59,130,246,.08);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}.bb:hover{background:rgba(59,130,246,.15)}
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center}
 .ov.show{display:flex}
 .mo{background:#10141f;border:1px solid #1e2a42;border-radius:14px;padding:22px;width:100%;max-width:420px;margin:16px}
 .mo h3{font-size:14px;font-weight:700;margin-bottom:16px}
 .mf{margin-bottom:11px}
-.ml{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.ml2{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
 .mv{font-size:13px;font-family:monospace;color:#e8edf5;word-break:break-all}
 .ma{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
 .toast{position:fixed;bottom:18px;right:18px;background:#25d366;color:#000;font-weight:700;font-size:12px;padding:10px 16px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.4);transform:translateY(60px);opacity:0;transition:all .25s;z-index:999}
@@ -177,37 +176,21 @@ tbody td{padding:11px 14px;font-size:12px}
     <button class="tab" onclick="sw('auto')">⚡ Automações</button>
     <button class="tab" onclick="sw('mon')">📊 Monitor</button>
   </div>
-  <div id="numSelector" style="display:flex;align-items:center;gap:8px;margin-right:16px">
-    <span style="font-size:11px;color:#6b7a99">Número:</span>
-    <select id="numSelect" onchange="trocarNumero(this.value)"
-      style="background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:5px 10px;outline:none;cursor:pointer;max-width:180px">
-      <option value="">Todos os números</option>
-    </select>
-  </div>
   <div class="top-right">
     <div class="sdot" id="sDot"></div>
     <span class="stxt" id="sTxt">Conectando...</span>
   </div>
 </div>
 
-<!-- ── CHAT ── -->
+<!-- CHAT -->
 <div class="pane active" id="pane-chat">
   <div class="sidebar">
-    <div class="sh">
-      <span>Conversas</span>
-      <span class="cbadge" id="cntBadge">0</span>
-    </div>
+    <div class="sh"><span>Conversas</span><span class="cbadge" id="cntBadge">0</span></div>
     <div class="sr"><input type="text" placeholder="Buscar..." oninput="filterC(this.value)"></div>
-    <div class="clist" id="clist">
-      <div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Carregando...</div>
-    </div>
+    <div class="clist" id="clist"><div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Carregando...</div></div>
   </div>
-
   <div class="chat-wrap">
-    <div class="no-conv" id="noConv">
-      <div class="ni">💬</div>
-      <p>Selecione uma conversa</p>
-    </div>
+    <div class="no-conv" id="noConv"><div class="ni">💬</div><p>Selecione uma conversa</p></div>
     <div class="chat-hdr" id="chatHdr" style="display:none">
       <div class="av g">👤</div>
       <div class="ch-info">
@@ -231,15 +214,13 @@ tbody td{padding:11px 14px;font-size:12px}
         <textarea id="msgIn" placeholder="Digite uma mensagem..." rows="1"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
           oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,110)+'px'"></textarea>
-        <button class="sbtn" onclick="sendMsg()">
-          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-        </button>
+        <button class="sbtn" onclick="sendMsg()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── AUTOMAÇÕES ── -->
+<!-- AUTOMAÇÕES -->
 <div class="pane" id="pane-auto">
   <div class="auto-hdr">
     <div>
@@ -248,12 +229,10 @@ tbody td{padding:11px 14px;font-size:12px}
     </div>
     <button class="btn bg" onclick="newAuto()">+ Nova automação</button>
   </div>
-  <div class="auto-list" id="autoList">
-    <div style="text-align:center;color:#6b7a99;font-size:13px;padding:40px">Carregando automações...</div>
-  </div>
+  <div class="auto-list" id="autoList"><div style="text-align:center;color:#6b7a99;font-size:13px;padding:40px">Carregando...</div></div>
 </div>
 
-<!-- ── MONITOR ── -->
+<!-- MONITOR -->
 <div class="pane" id="pane-mon">
   <div class="mon-hdr">
     <div style="display:flex;align-items:center;gap:10px">
@@ -281,15 +260,14 @@ tbody td{padding:11px 14px;font-size:12px}
   </div>
 </div>
 
-<!-- Modal detalhe -->
+<!-- Modal -->
 <div class="ov" id="ov" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="mo">
     <h3>📲 Detalhe</h3>
-    <div class="mf"><div class="ml">Telefone</div><div class="mv" id="dPh"></div></div>
-    <div class="mf"><div class="ml">Nome</div><div class="mv" id="dNm"></div></div>
-    <div class="mf"><div class="ml">Mensagem</div><div class="mv" id="dBt"></div></div>
-    <div class="mf"><div class="ml">Automação ativada</div><div class="mv" id="dPl"></div></div>
-    <div class="mf"><div class="ml">Recebido em</div><div class="mv" id="dTm"></div></div>
+    <div class="mf"><div class="ml2">Telefone</div><div class="mv" id="dPh"></div></div>
+    <div class="mf"><div class="ml2">Nome</div><div class="mv" id="dNm"></div></div>
+    <div class="mf"><div class="ml2">Mensagem</div><div class="mv" id="dBt"></div></div>
+    <div class="mf"><div class="ml2">Recebido em</div><div class="mv" id="dTm"></div></div>
     <div class="ma">
       <button class="btn bg" onclick="markDone()">✅ Marcar respondido</button>
       <button class="btn bo" onclick="document.getElementById('ov').classList.remove('show')">Fechar</button>
@@ -300,64 +278,79 @@ tbody td{padding:11px 14px;font-size:12px}
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────────
 const SURL = 'https://ojgcddedmvuzealgbplq.supabase.co/rest/v1';
 const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qZ2NkZGVkbXZ1emVhbGdicGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMDE0MTQsImV4cCI6MjA5NDY3NzQxNH0.WGfc8sQTTxGk3K7098jCUczSIwAQ7j9SqLBUAWELu60';
-// ⚠️ Preencha suas credenciais Meta:
-const META_TOKEN   = localStorage.getItem('meta_token')   || '';
-const META_PHONE_ID = localStorage.getItem('meta_phone_id') || '';
+const H = {'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'};
 
-const H = { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY, 'Content-Type': 'application/json' };
 const supa = async (path, opts={}) => {
-  const r = await fetch(SURL + path, { headers: H, ...opts });
-  const t = await r.text(); return t ? JSON.parse(t) : [];
+  const r = await fetch(SURL+path, {headers:H, ...opts});
+  const t = await r.text();
+  return t ? JSON.parse(t) : [];
 };
 
-let allMsgs=[], allAutos=[], allSent=[], allNumeros=[], contacts={}, selPhone=null, selId=null, msgType='text', outbox={}, selNumeroId=null;
+let allMsgs=[], allAutos=[], allSent=[], contacts={};
+let selPhone=null, selId=null, msgType='text';
 
-// ── LOAD ───────────────────────────────────────────────────
+// ── LOAD ──────────────────────────────────────────────────
 async function loadAll(force=false) {
   try {
-    const abaAtiva = document.querySelector('.pane.active')?.id;
-    const filtroNum = selNumeroId ? '&phone_number_id=eq.'+selNumeroId : '';
-    [allMsgs, allAutos, allSent, allNumeros] = await Promise.all([
-      supa('/mensagens?order=criado_em.desc&limit=500'+filtroNum),
+    const aba = document.querySelector('.pane.active')?.id;
+    [allMsgs, allAutos, allSent] = await Promise.all([
+      supa('/mensagens?order=criado_em.asc&limit=500'),
       supa('/automacoes?order=criado_em.asc'),
-      supa('/mensagens_enviadas?order=criado_em.desc&limit=500'+(selNumeroId?'&phone_number_id=eq.'+selNumeroId:'')),
-      supa('/numeros?ativo=eq.true&order=criado_em.asc')
+      supa('/mensagens_enviadas?order=criado_em.asc&limit=500')
     ]);
-    renderNumeroSelector();
     setS(true);
     buildContacts();
     renderContacts();
-    // Só re-renderiza automações se for chamada explícita (force) ou se não estiver na aba auto
-    if (force || abaAtiva !== 'pane-auto') renderAutos();
+    if (force || aba !== 'pane-auto') renderAutos();
     renderMonitor();
     if (selPhone) renderChat(selPhone);
   } catch(e) { setS(false); }
 }
 
-// ── CONTACTS ───────────────────────────────────────────────
+// ── CONTACTS ─────────────────────────────────────────────
 function buildContacts() {
   contacts = {};
 
-  // Junta recebidas e enviadas com direção
+  // Todas as mensagens (recebidas + enviadas) ordenadas por tempo
   const todas = [
-    ...[...allMsgs].map(m => ({ ...m, dir: 'in',  texto: m.botao_texto || '—' })),
-    ...[...allSent].map(m => ({ ...m, dir: 'out', texto: m.texto || '—', status: 'respondido' }))
-  ].sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
+    ...allMsgs.map(m => ({
+      telefone: m.telefone,
+      nome: m.nome || m.telefone,
+      preview: m.botao_texto || '—',
+      time: m.criado_em,
+      dir: 'in',
+      status: m.status,
+      id: m.id
+    })),
+    ...allSent.map(m => ({
+      telefone: m.telefone,
+      nome: m.nome || m.telefone,
+      preview: '✉️ ' + (m.texto || '—'),
+      time: m.criado_em,
+      dir: 'out',
+      status: 'respondido',
+      id: m.id
+    }))
+  ].sort((a,b) => new Date(a.time) - new Date(b.time));
 
+  // Monta contatos com a última mensagem de qualquer direção
   todas.forEach(m => {
     if (!m.telefone) return;
-    const preview = m.dir === 'out' ? '✅ ' + m.texto : m.texto;
-    contacts[m.telefone] = {
-      nome:   m.nome || m.telefone,
-      ultima: preview,
-      time:   m.criado_em,
-      status: m.dir === 'out' ? 'respondido' : (m.status || 'recebido'),
-      id:     m.id,
-      dir:    m.dir
-    };
+    if (!contacts[m.telefone]) {
+      contacts[m.telefone] = { nome: m.nome, preview: m.preview, time: m.time, status: m.status, id: m.id };
+    } else {
+      contacts[m.telefone].preview = m.preview;
+      contacts[m.telefone].time    = m.time;
+      // Só marca como não lido se for mensagem recebida
+      if (m.dir === 'in' && m.status === 'recebido') {
+        contacts[m.telefone].status = 'recebido';
+        contacts[m.telefone].id = m.id;
+      } else if (m.dir === 'out') {
+        contacts[m.telefone].status = 'respondido';
+      }
+    }
   });
 
   document.getElementById('cntBadge').textContent = Object.keys(contacts).length;
@@ -368,18 +361,23 @@ function renderContacts(f='') {
     !f || contacts[p].nome.toLowerCase().includes(f.toLowerCase()) || p.includes(f)
   );
   const el = document.getElementById('clist');
-  if (!phones.length) { el.innerHTML = '<div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Nenhum contato</div>'; return; }
+  if (!phones.length) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Nenhum contato ainda</div>';
+    return;
+  }
+  // Ordena por tempo (mais recente primeiro)
+  phones.sort((a,b) => new Date(contacts[b].time) - new Date(contacts[a].time));
   el.innerHTML = phones.map(p => {
     const c = contacts[p];
     return `<div class="ci${p===selPhone?' sel':''}" onclick="selContact('${p}')">
       <div class="av g">👤</div>
       <div class="cinfo">
         <div class="cname">${esc(c.nome)}</div>
-        <div class="cprev">${esc(c.ultima)}</div>
+        <div class="cprev">${esc(c.preview)}</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
         <span class="ctime">${fdt(c.time)}</span>
-        ${c.status==='recebido'&&c.dir!=='out'?'<span class="unr">!</span>':''}
+        ${c.status==='recebido'?'<span class="unr">!</span>':''}
       </div>
     </div>`;
   }).join('');
@@ -398,70 +396,68 @@ async function selContact(phone) {
   document.getElementById('hdrName').textContent  = contacts[phone]?.nome || phone;
   document.getElementById('hdrPhone').textContent = phone;
   renderChat(phone);
-  // Marca todas as mensagens desse contato como lidas
-  await marcarTodasLidas(phone);
+  // Marca como lido
+  await marcarLidas(phone);
 }
 
-async function marcarTodasLidas(phone) {
+async function marcarLidas(phone) {
   try {
     await supa('/mensagens?telefone=eq.'+phone+'&status=eq.recebido', {
-      method: 'PATCH',
-      body: JSON.stringify({ status: 'respondido' })
+      method:'PATCH', body:JSON.stringify({status:'respondido'})
     });
-    // Atualiza localmente sem re-renderizar tudo
-    allMsgs.forEach(m => { if (m.telefone === phone) m.status = 'respondido'; });
+    allMsgs.forEach(m => { if (m.telefone===phone) m.status='respondido'; });
     if (contacts[phone]) contacts[phone].status = 'respondido';
     renderContacts();
-  } catch(e) { console.error('erro ao marcar lida:', e); }
+  } catch(e) {}
 }
 
-// ── CHAT ───────────────────────────────────────────────────
+// ── CHAT ─────────────────────────────────────────────────
 function renderChat(phone) {
   const el = document.getElementById('msgList');
-  const recv = allMsgs.filter(m => m.telefone === phone).reverse()
-    .map(m => ({ dir:'in', text: m.botao_texto||'—', time: m.criado_em, type:'text' }));
-  // Mensagens enviadas do Supabase + outbox local (ainda não salvas)
-  const sentDB = allSent.filter(m => m.telefone === phone)
-    .map(m => ({ dir:'out', text: m.texto||'—', time: m.criado_em, type: m.tipo||'text', btnText: m.botao_texto||'' }));
-  const sentLocal = (outbox[phone]||[]).filter(o => !sentDB.find(s => Math.abs(new Date(s.time)-new Date(o.time))<3000));
-  const all = [...recv, ...sentDB, ...sentLocal].sort((a,b) => new Date(a.time)-new Date(b.time));
-  if (!all.length) { el.innerHTML = '<div style="text-align:center;color:#6b7a99;font-size:12px;padding:20px">Nenhuma mensagem</div>'; return; }
+  const recv = allMsgs
+    .filter(m => m.telefone === phone)
+    .map(m => ({ dir:'in', text: m.botao_texto||'—', time: m.criado_em, tipo:'text' }));
+  const sent = allSent
+    .filter(m => m.telefone === phone)
+    .map(m => ({ dir:'out', text: m.texto||'—', time: m.criado_em, tipo: m.tipo||'text', btnText: m.botao_texto||'' }));
+  const all = [...recv, ...sent].sort((a,b) => new Date(a.time)-new Date(b.time));
+
+  if (!all.length) {
+    el.innerHTML = '<div style="text-align:center;color:#6b7a99;font-size:12px;padding:20px">Nenhuma mensagem</div>';
+    return;
+  }
   el.innerHTML = all.map(m => `
     <div class="msg ${m.dir}">
       ${m.dir==='in'?`<div class="mfrom">👤 ${esc(contacts[phone]?.nome||phone)}</div>`:''}
-      <div class="bbl${m.type==='cta'?' cta':''}">
+      <div class="bbl${m.tipo==='cta'?' cta':''}">
         ${esc(m.text)}
-        ${m.type==='cta'?`<div class="cta-pb">🔗 ${esc(m.btnText||'Botão')}</div>`:''}
+        ${m.tipo==='cta'?`<div class="cta-pb">🔗 ${esc(m.btnText)}</div>`:''}
       </div>
       <div class="mtime">${fdtFull(m.time)}</div>
     </div>`).join('');
   el.scrollTop = el.scrollHeight;
 }
 
-// ── ENVIAR ─────────────────────────────────────────────────
+// ── ENVIAR ────────────────────────────────────────────────
 async function sendMsg() {
   if (!selPhone) return toast('Selecione um contato');
   const text = document.getElementById('msgIn').value.trim();
   if (!text) return;
-  // Busca credenciais do número selecionado
-  const numSel = allNumeros.find(n=>n.phone_number_id===selNumeroId) || allNumeros[0];
-  const token = numSel?.access_token || localStorage.getItem('meta_token');
-  const phoneId = numSel?.phone_number_id || localStorage.getItem('meta_phone_id');
-  if (!token || !phoneId) return toast('⚠️ Adicione um número na aba Automações → Números');
+  const token   = localStorage.getItem('meta_token');
+  const phoneId = localStorage.getItem('meta_phone_id');
+  if (!token || !phoneId) return toast('⚠️ Configure o Token e Phone ID em Automações');
   try {
     if (msgType === 'cta') await sendCTA(text, token, phoneId);
     else await sendText(text, token, phoneId);
-  } catch(e) { toast('❌ ' + e.message); }
+  } catch(e) { toast('❌ '+e.message); }
 }
 
 async function sendText(text, token, phoneId) {
-  await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'text', text:{ body:text } }, token, phoneId);
-  // Salva no Supabase
-  const numAtual = allNumeros.find(n=>n.phone_number_id===selNumeroId)||allNumeros[0]||{};
-  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:text, tipo:'text', botao_texto:'', phone_number_id:numAtual.phone_number_id||'' }) });
+  await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'text',text:{body:text}}, token, phoneId);
+  await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:text,tipo:'text',botao_texto:''})});
   document.getElementById('msgIn').value='';
   await loadAll();
-  renderChat(selPhone); toast('✅ Enviado!');
+  toast('✅ Enviado!');
 }
 
 async function sendCTA(bodyText, token, phoneId) {
@@ -470,16 +466,14 @@ async function sendCTA(bodyText, token, phoneId) {
   const hdr  = document.getElementById('ctaHdr').value.trim();
   const ftr  = document.getElementById('ctaFtr').value.trim();
   if (!btnT||!btnU) return toast('Preencha texto e URL do botão');
-  const interactive = { type:'cta_url', body:{text:bodyText}, action:{name:'cta_url',parameters:{display_text:btnT.substring(0,20),url:btnU}} };
-  if (hdr) interactive.header = { type:'text', text:hdr };
-  if (ftr) interactive.footer = { text:ftr };
-  await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'interactive', interactive }, token, phoneId);
-  // Salva no Supabase
-  const numAtualCTA = allNumeros.find(n=>n.phone_number_id===selNumeroId)||allNumeros[0]||{};
-  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:bodyText, tipo:'cta', botao_texto:btnT, phone_number_id:numAtualCTA.phone_number_id||'' }) });
+  const interactive = {type:'cta_url',body:{text:bodyText},action:{name:'cta_url',parameters:{display_text:btnT.substring(0,20),url:btnU}}};
+  if (hdr) interactive.header={type:'text',text:hdr};
+  if (ftr) interactive.footer={text:ftr};
+  await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'interactive',interactive}, token, phoneId);
+  await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:bodyText,tipo:'cta',botao_texto:btnT})});
   document.getElementById('msgIn').value='';
   await loadAll();
-  renderChat(selPhone); toast('✅ CTA enviado!');
+  toast('✅ CTA enviado!');
 }
 
 async function metaPost(body, token, phoneId) {
@@ -497,148 +491,75 @@ function setMT(t, btn) {
   document.getElementById('ctaExtra').classList.toggle('show', t==='cta');
 }
 
-// ── AUTOMAÇÕES ─────────────────────────────────────────────
+// ── AUTOMAÇÕES ────────────────────────────────────────────
 function renderAutos() {
   const el = document.getElementById('autoList');
-
-  // Card de números
-  const numerosCard = `
-  <div class="auto-card" style="border-color:rgba(37,211,102,.3);margin-bottom:0">
-    <div class="ac-hdr" onclick="toggleCard('numeros-body', event)">
-      <div class="ac-icon">📱</div>
-      <div class="ac-info">
-        <div class="ac-name">Números WhatsApp</div>
-        <div class="ac-desc">${allNumeros.length} número(s) cadastrado(s)</div>
-      </div>
-      <span style="color:#6b7a99;font-size:12px">▼</span>
-    </div>
-    <div class="ac-body open" id="numeros-body">
-      <div id="numeros-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
-        ${allNumeros.length ? allNumeros.map(n => `
-          <div style="background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600;margin-bottom:4px">${esc(n.nome)}</div>
-              <div style="font-size:11px;color:#6b7a99;font-family:monospace">${esc(n.phone_number_id)}</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-size:10px;padding:2px 8px;border-radius:8px;background:${n.ativo?'rgba(37,211,102,.1)':'rgba(239,68,68,.1)'};color:${n.ativo?'#25d366':'#f87171'};border:1px solid ${n.ativo?'rgba(37,211,102,.2)':'rgba(239,68,68,.2)'}">${n.ativo?'Ativo':'Inativo'}</span>
-              <button class="btn br" style="padding:4px 10px;font-size:11px" onclick="deleteNumero('${n.id}')">🗑</button>
-            </div>
-          </div>
-        `).join('') : '<div style="color:#6b7a99;font-size:12px;padding:8px 0">Nenhum número cadastrado</div>'}
-      </div>
-      <div style="background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:14px">
-        <div style="font-size:11px;color:#25d366;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">+ Adicionar número</div>
-        <div class="field-grid">
-          <div class="field"><label>Nome do número</label><input type="text" id="novoNome" placeholder="Ex: Vendas, Suporte"></div>
-          <div class="field"><label>Phone Number ID</label><input type="text" id="novoPhoneId" placeholder="123456789012345" style="font-family:monospace"></div>
-          <div class="field full"><label>Access Token</label><input type="password" id="novoToken" placeholder="EAAxxxxxxxxxxxxxxx"></div>
-        </div>
-        <button class="btn bg" style="margin-top:10px" onclick="addNumero()">+ Adicionar</button>
-      </div>
-    </div>
-  </div>`;
-
-  // Card de configurações globais (Meta) - mantido para fallback
   const metaToken   = localStorage.getItem('meta_token')||'';
   const metaPhoneId = localStorage.getItem('meta_phone_id')||'';
 
   const settingsCard = `
   <div class="auto-card" style="border-color:rgba(59,130,246,.3)">
-    <div class="ac-hdr" onclick="toggleCard('settings-body', event)">
+    <div class="ac-hdr" onclick="toggleCard('settings-body',event)">
       <div class="ac-icon">🔑</div>
-      <div class="ac-info">
-        <div class="ac-name">Configurações Meta API</div>
-        <div class="ac-desc">Access Token e Phone Number ID para envio</div>
-      </div>
-      <span style="color:#6b7a99;font-size:12px">▼</span>
+      <div class="ac-info"><div class="ac-name">Configurações Meta API</div><div class="ac-desc">Access Token e Phone Number ID</div></div>
+      <span style="color:#6b7a99;font-size:11px">▼</span>
     </div>
     <div class="ac-body open" id="settings-body">
       <div class="field-grid">
-        <div class="field full">
-          <label>Access Token</label>
-          <input type="password" id="metaTokenInput" value="${metaToken}" placeholder="EAAxxxxxxx">
-        </div>
-        <div class="field full">
-          <label>Phone Number ID</label>
-          <input type="text" id="metaPhoneInput" value="${metaPhoneId}" placeholder="123456789012345">
-        </div>
+        <div class="field full"><label>Access Token</label><input type="password" id="metaTokenInput" value="${metaToken}" placeholder="EAAxxxxxxx"></div>
+        <div class="field full"><label>Phone Number ID</label><input type="text" id="metaPhoneInput" value="${metaPhoneId}" placeholder="123456789012345"></div>
       </div>
-      <div class="ac-actions">
-        <button class="btn bg" onclick="saveMetaConfig()">💾 Salvar</button>
-      </div>
+      <div class="ac-actions"><button class="btn bg" onclick="saveMetaConfig()">💾 Salvar</button></div>
     </div>
   </div>`;
 
   if (!allAutos.length) {
-    el.innerHTML = numerosCard + settingsCard + `<div style="text-align:center;color:#6b7a99;font-size:13px;padding:30px">
+    el.innerHTML = settingsCard + `<div style="text-align:center;color:#6b7a99;font-size:13px;padding:30px">
       Nenhuma automação criada.<br><button class="btn bg" style="margin-top:12px" onclick="newAuto()">+ Criar primeira automação</button>
     </div>`;
     return;
   }
-
-  el.innerHTML = numerosCard + settingsCard + allAutos.map(a => buildAutoCard(a)).join('');
+  el.innerHTML = settingsCard + allAutos.map(a => buildAutoCard(a)).join('');
 }
 
 function buildAutoCard(a) {
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
-  const enabled = a.ativo;
   return `
-  <div class="auto-card${enabled?' enabled':''}" id="acard-${a.id}">
-    <div class="ac-hdr" onclick="toggleCard('abody-${a.id}', event)">
-      <div class="ac-icon">${enabled?'⚡':'⏸'}</div>
+  <div class="auto-card${a.ativo?' enabled':''}" id="acard-${a.id}">
+    <div class="ac-hdr" onclick="toggleCard('abody-${a.id}',event)">
+      <div class="ac-icon">${a.ativo?'⚡':'⏸'}</div>
       <div class="ac-info">
         <div class="ac-name">${esc(a.nome||'Sem nome')}</div>
         <div class="ac-desc">Gatilho: ${kws.map(k=>`<b style="color:#25d366">${esc(k)}</b>`).join(', ')||'—'}</div>
       </div>
       <label class="toggle" onclick="event.stopPropagation()">
-        <input type="checkbox" ${enabled?'checked':''} onchange="toggleAuto('${a.id}', this.checked)">
+        <input type="checkbox" ${a.ativo?'checked':''} onchange="toggleAuto('${a.id}',this.checked)">
         <div class="toggle-track"></div>
         <div class="toggle-thumb"></div>
       </label>
     </div>
     <div class="ac-body" id="abody-${a.id}">
       <div class="field-grid">
+        <div class="field full"><label>Nome da automação</label><input type="text" id="aname-${a.id}" value="${esc(a.nome||'')}"></div>
         <div class="field full">
-          <label>Nome da automação</label>
-          <input type="text" id="aname-${a.id}" value="${esc(a.nome||'')}">
-        </div>
-        <div class="field full">
-          <label>Palavras-chave que ativam (separadas por vírgula)</label>
+          <label>Palavras-chave que ativam esta automação</label>
           <div class="kw-wrap" id="kwwrap-${a.id}">
-            ${kws.length ? kws.map((k,i)=>`<span class="kw-tag">${esc(k)}<button type="button" onclick="removeKw('${a.id}',${i})">×</button></span>`).join('') : '<span style=\'color:#6b7a99;font-size:11px\'>Nenhuma palavra-chave</span>'}
+            ${kws.length ? kws.map((k,i)=>`<span class="kw-tag">${esc(k)}<button type="button" onclick="removeKw('${a.id}',${i})">×</button></span>`).join('') : '<span style="color:#6b7a99;font-size:11px">Nenhuma palavra-chave</span>'}
           </div>
           <div class="kw-input-row">
-            <input type="text" id="kwinput-${a.id}" placeholder="Ex: saber mais, quero comprar" onkeydown="if(event.key==='Enter'){addKw('${a.id}');event.preventDefault()}">
-            <button class="btn bo" onclick="addKw('${a.id}')">+ Add</button>
+            <input type="text" id="kwinput-${a.id}" placeholder="Ex: saber mais" onkeydown="if(event.key==='Enter'){addKw('${a.id}');event.preventDefault()}">
+            <button class="btn bo" type="button" onclick="addKw('${a.id}')">+ Add</button>
           </div>
-          <div class="info-tag">ℹ️ Se o cliente digitar ou clicar em qualquer uma dessas palavras, a automação dispara</div>
+          <div class="info-tag">ℹ️ O cliente manda qualquer uma dessas palavras → automação dispara</div>
         </div>
-        <div class="field full">
-          <label>Corpo da mensagem <span style="color:#6b7a99">(use {nome} para personalizar)</span></label>
-          <textarea id="abody2-${a.id}" rows="3" onkeyup="prevUpdate('${a.id}')">${esc(a.mensagem_corpo||'')}</textarea>
-        </div>
-        <div class="field">
-          <label>Header (opcional)</label>
-          <input type="text" id="ahdr-${a.id}" value="${esc(a.mensagem_header||'')}" onkeyup="prevUpdate('${a.id}')">
-        </div>
-        <div class="field">
-          <label>Footer (opcional)</label>
-          <input type="text" id="aftr-${a.id}" value="${esc(a.mensagem_footer||'')}" onkeyup="prevUpdate('${a.id}')">
-        </div>
-        <div class="field">
-          <label>Texto do botão (máx 20 chars)</label>
-          <input type="text" id="abtnT-${a.id}" value="${esc(a.botao_texto||'')}" maxlength="20" onkeyup="prevUpdate('${a.id}')">
-        </div>
-        <div class="field">
-          <label>URL do botão</label>
-          <input type="url" id="abtnU-${a.id}" value="${esc(a.botao_url||'')}" onkeyup="prevUpdate('${a.id}')">
-        </div>
+        <div class="field full"><label>Corpo da mensagem <span style="color:#6b7a99">(use {nome} para personalizar)</span></label><textarea id="abody2-${a.id}" rows="3" oninput="prevUpdate('${a.id}')">${esc(a.mensagem_corpo||'')}</textarea></div>
+        <div class="field"><label>Header (opcional)</label><input type="text" id="ahdr-${a.id}" value="${esc(a.mensagem_header||'')}" oninput="prevUpdate('${a.id}')"></div>
+        <div class="field"><label>Footer (opcional)</label><input type="text" id="aftr-${a.id}" value="${esc(a.mensagem_footer||'')}" oninput="prevUpdate('${a.id}')"></div>
+        <div class="field"><label>Texto do botão (máx 20)</label><input type="text" id="abtnT-${a.id}" value="${esc(a.botao_texto||'')}" maxlength="20" oninput="prevUpdate('${a.id}')"></div>
+        <div class="field"><label>URL do botão</label><input type="url" id="abtnU-${a.id}" value="${esc(a.botao_url||'')}" oninput="prevUpdate('${a.id}')"></div>
       </div>
-
-      <!-- Preview -->
       <div style="margin-top:14px">
-        <div style="font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Preview da mensagem</div>
+        <div style="font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Preview</div>
         <div class="preview-box">
           <div class="prev-bbl">
             <div class="prev-hdr" id="prevHdr-${a.id}">${esc(a.mensagem_header||'')}</div>
@@ -648,7 +569,6 @@ function buildAutoCard(a) {
           </div>
         </div>
       </div>
-
       <div class="ac-actions">
         <button class="btn bg" onclick="saveAuto('${a.id}')">💾 Salvar</button>
         <button class="btn br" onclick="deleteAuto('${a.id}')">🗑 Excluir</button>
@@ -668,10 +588,14 @@ function toggleCard(id, e) {
 
 function prevUpdate(id) {
   const g = i => (document.getElementById(i)||{}).value||'';
-  document.getElementById('prevHdr-'+id).textContent  = g('ahdr-'+id);
-  document.getElementById('prevBody-'+id).textContent = g('abody2-'+id).replace('{nome}','João');
-  document.getElementById('prevFtr-'+id).textContent  = g('aftr-'+id);
-  document.getElementById('prevBtn-'+id).textContent  = '🔗 '+(g('abtnT-'+id)||'Botão');
+  const hdr = document.getElementById('prevHdr-'+id);
+  const body = document.getElementById('prevBody-'+id);
+  const ftr = document.getElementById('prevFtr-'+id);
+  const btn = document.getElementById('prevBtn-'+id);
+  if (hdr)  hdr.textContent  = g('ahdr-'+id);
+  if (body) body.textContent = g('abody2-'+id).replace('{nome}','João');
+  if (ftr)  ftr.textContent  = g('aftr-'+id);
+  if (btn)  btn.textContent  = '🔗 '+(g('abtnT-'+id)||'Botão');
 }
 
 function renderKws(id) {
@@ -687,14 +611,12 @@ function renderKws(id) {
 
 function addKw(id) {
   const input = document.getElementById('kwinput-'+id);
-  const val = input.value.trim();
+  const val = input.value.trim().toLowerCase();
   if (!val) return;
   const a = allAutos.find(x=>x.id===id);
   if (!a) return;
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
-  const valLower = val.toLowerCase();
-  // Verifica duplicata ignorando maiúsculas
-  if (!kws.map(k=>k.toLowerCase()).includes(valLower)) kws.push(valLower);
+  if (!kws.map(k=>k.toLowerCase()).includes(val)) kws.push(val);
   a.palavras_chave = kws.join(', ');
   input.value = '';
   input.focus();
@@ -711,7 +633,7 @@ function removeKw(id, idx) {
 }
 
 async function toggleAuto(id, val) {
-  await supa('/automacoes?id=eq.'+id, { method:'PATCH', body:JSON.stringify({ ativo:val }) });
+  await supa('/automacoes?id=eq.'+id, {method:'PATCH', body:JSON.stringify({ativo:val})});
   const a = allAutos.find(x=>x.id===id);
   if (a) a.ativo = val;
   const card = document.getElementById('acard-'+id);
@@ -722,100 +644,65 @@ async function toggleAuto(id, val) {
 async function saveAuto(id) {
   const g = i => (document.getElementById(i)||{}).value||'';
   const a = allAutos.find(x=>x.id===id);
-  const kws = a?.palavras_chave || '';
   const data = {
-    nome:             g('aname-'+id),
-    palavras_chave:   kws.split(',').map(k=>k.trim()).filter(Boolean).join(', '),
-    mensagem_corpo:   g('abody2-'+id),
-    mensagem_header:  g('ahdr-'+id),
-    mensagem_footer:  g('aftr-'+id),
-    botao_texto:      g('abtnT-'+id),
-    botao_url:        g('abtnU-'+id),
-    access_token:     localStorage.getItem('meta_token')||'',
+    nome:            g('aname-'+id),
+    palavras_chave:  (a?.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean).join(', '),
+    mensagem_corpo:  g('abody2-'+id),
+    mensagem_header: g('ahdr-'+id),
+    mensagem_footer: g('aftr-'+id),
+    botao_texto:     g('abtnT-'+id),
+    botao_url:       g('abtnU-'+id),
+    access_token:    localStorage.getItem('meta_token')||''
   };
-  await supa('/automacoes?id=eq.'+id, { method:'PATCH', body:JSON.stringify(data) });
+  await supa('/automacoes?id=eq.'+id, {method:'PATCH', body:JSON.stringify(data)});
   toast('✅ Automação salva!');
   loadAll(true);
 }
 
 async function deleteAuto(id) {
   if (!confirm('Excluir esta automação?')) return;
-  await supa('/automacoes?id=eq.'+id, { method:'DELETE' });
+  await supa('/automacoes?id=eq.'+id, {method:'DELETE'});
   toast('🗑 Excluída'); loadAll(true);
 }
 
 async function newAuto() {
-  const data = {
-    nome: 'Nova automação',
-    palavras_chave: '',
-    mensagem_corpo: 'Olá, {nome}! Clique no botão abaixo para saber mais.',
-    mensagem_header: '',
-    mensagem_footer: 'Respondemos em até 2h.',
-    botao_texto: 'Acessar agora',
-    botao_url: 'https://seusite.com.br',
-    ativo: false,
-    access_token: localStorage.getItem('meta_token')||''
-  };
-  await supa('/automacoes', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(data) });
-  toast('✅ Automação criada! Configure abaixo.');
+  const data = {nome:'Nova automação',palavras_chave:'',mensagem_corpo:'Olá, {nome}! Clique no botão abaixo.',mensagem_header:'',mensagem_footer:'Respondemos em até 2h.',botao_texto:'Acessar agora',botao_url:'https://seusite.com.br',ativo:false,access_token:localStorage.getItem('meta_token')||''};
+  await supa('/automacoes', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(data)});
+  toast('✅ Criada! Configure abaixo.');
   await loadAll(true);
   sw('auto');
-  // Abre o card da última criada
   const last = allAutos[allAutos.length-1];
-  if (last) { document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open')); const el = document.getElementById('abody-'+last.id); if(el) el.classList.add('open'); }
-}
-
-async function addNumero() {
-  const nome    = (document.getElementById('novoNome')||{}).value?.trim();
-  const phoneId = (document.getElementById('novoPhoneId')||{}).value?.trim();
-  const token   = (document.getElementById('novoToken')||{}).value?.trim();
-  if (!nome || !phoneId || !token) return toast('⚠️ Preencha todos os campos');
-  try {
-    await supa('/numeros', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ nome, phone_number_id:phoneId, access_token:token, ativo:true }) });
-    toast('✅ Número adicionado!');
-    loadAll(true);
-  } catch(e) { toast('❌ Erro: ' + e.message); }
-}
-
-async function deleteNumero(id) {
-  if (!confirm('Remover este número?')) return;
-  await supa('/numeros?id=eq.'+id, { method:'DELETE' });
-  toast('🗑 Número removido');
-  loadAll(true);
+  if (last) { document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open')); const el=document.getElementById('abody-'+last.id); if(el) el.classList.add('open'); }
 }
 
 function saveMetaConfig() {
-  const token = document.getElementById('metaTokenInput').value.trim();
-  const phone = document.getElementById('metaPhoneInput').value.trim();
-  localStorage.setItem('meta_token', token);
-  localStorage.setItem('meta_phone_id', phone);
+  localStorage.setItem('meta_token', document.getElementById('metaTokenInput').value.trim());
+  localStorage.setItem('meta_phone_id', document.getElementById('metaPhoneInput').value.trim());
   toast('✅ Credenciais salvas!');
 }
 
-// ── MONITOR ───────────────────────────────────────────────
-let monMsgs = [];
+// ── MONITOR ──────────────────────────────────────────────
 function renderMonitor() {
-  monMsgs = [...allMsgs];
   filterM();
   document.getElementById('totBadge').textContent = allMsgs.length;
 }
 
 function filterM(v) {
-  const q = v !== undefined ? v : (document.querySelector('#pane-mon input')||{value:''}).value.toLowerCase();
+  const q = v !== undefined ? v.toLowerCase() : (document.querySelector('#pane-mon input')||{value:''}).value.toLowerCase();
   const s = (document.getElementById('mfst')||{}).value||'';
-  const list = monMsgs.filter(m => {
+  const list = allMsgs.filter(m => {
     const mq = !q || (m.telefone||'').includes(q) || (m.nome||'').toLowerCase().includes(q);
     const ms = !s || m.status===s;
     return mq && ms;
   });
   const tb = document.getElementById('monTbl');
   if (!list.length) { tb.innerHTML='<tr><td colspan="6"><div class="empty">Nenhuma mensagem</div></td></tr>'; return; }
-  tb.innerHTML = list.map(m => `<tr onclick="openMon('${m.id}')">
+  tb.innerHTML = [...list].reverse().map(m => `<tr onclick="openMon('${m.id}')">
     <td><span class="pc">${esc(m.telefone||'—')}</span></td>
     <td>${esc(m.nome||'—')}</td>
     <td>${esc(m.botao_texto||'—')}</td>
     <td style="color:#25d366;font-size:11px">${esc(m.botao_payload||'—')}</td>
-    <td><span class="sp ${m.status||'recebido'}">${m.status==='respondido'?'✅':'📩 '+(m.status||'recebido')}</span></td>
+    <td><span class="sp ${m.status||'recebido'}">${m.status==='respondido'?'✅ Lido':'📩 Novo'}</span></td>
     <td style="color:#6b7a99;font-size:11px;font-family:monospace">${fdtFull(m.criado_em)}</td>
   </tr>`).join('');
 }
@@ -826,24 +713,23 @@ function openMon(id) {
   document.getElementById('dPh').textContent = m.telefone||'—';
   document.getElementById('dNm').textContent = m.nome||'—';
   document.getElementById('dBt').textContent = m.botao_texto||'—';
-  document.getElementById('dPl').textContent = m.botao_payload||'—';
   document.getElementById('dTm').textContent = fdtFull(m.criado_em);
   document.getElementById('ov').classList.add('show');
 }
 
 async function markDone() {
   if (!selId) return;
-  await supa('/mensagens?id=eq.'+selId, { method:'PATCH', body:JSON.stringify({status:'respondido'}) });
+  await supa('/mensagens?id=eq.'+selId, {method:'PATCH', body:JSON.stringify({status:'respondido'})});
   toast('✅ Marcado'); document.getElementById('ov').classList.remove('show'); loadAll();
 }
 
 async function clearMsgs() {
   if (!confirm('Apagar todas as mensagens?')) return;
-  await supa('/mensagens?id=neq.00000000-0000-0000-0000-000000000000', { method:'DELETE' });
+  await supa('/mensagens?id=neq.00000000-0000-0000-0000-000000000000', {method:'DELETE'});
   toast('🗑 Apagado'); loadAll();
 }
 
-// ── UTILS ─────────────────────────────────────────────────
+// ── UTILS ────────────────────────────────────────────────
 function sw(n) {
   document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['chat','auto','mon'][i]===n));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
@@ -853,26 +739,6 @@ function sw(n) {
 function setS(ok) {
   document.getElementById('sDot').className='sdot'+(ok?' on':'');
   document.getElementById('sTxt').textContent=ok?'Supabase online':'Sem conexão';
-}
-
-function renderNumeroSelector() {
-  const sel = document.getElementById('numSelect');
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">Todos os números</option>' +
-    allNumeros.map(n => `<option value="${n.phone_number_id}" ${n.phone_number_id===cur?'selected':''}>${esc(n.nome)}</option>`).join('');
-}
-
-function trocarNumero(phoneNumberId) {
-  selNumeroId = phoneNumberId || null;
-  selPhone = null;
-  // Reseta chat
-  document.getElementById('noConv').style.display = 'flex';
-  document.getElementById('chatHdr').style.display = 'none';
-  const ml = document.getElementById('msgList');
-  const ia = document.getElementById('inputArea');
-  if(ml) ml.style.display = 'none';
-  if(ia) ia.style.display = 'none';
-  loadAll(true);
 }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -898,7 +764,7 @@ function toast(msg) {
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ── INIT ──────────────────────────────────────────────────
+// ── INIT ─────────────────────────────────────────────────
 loadAll();
 setInterval(loadAll, 7000);
 </script>
