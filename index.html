@@ -177,6 +177,13 @@ tbody td{padding:11px 14px;font-size:12px}
     <button class="tab" onclick="sw('auto')">⚡ Automações</button>
     <button class="tab" onclick="sw('mon')">📊 Monitor</button>
   </div>
+  <div id="numSelector" style="display:flex;align-items:center;gap:8px;margin-right:16px">
+    <span style="font-size:11px;color:#6b7a99">Número:</span>
+    <select id="numSelect" onchange="trocarNumero(this.value)"
+      style="background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:5px 10px;outline:none;cursor:pointer;max-width:180px">
+      <option value="">Todos os números</option>
+    </select>
+  </div>
   <div class="top-right">
     <div class="sdot" id="sDot"></div>
     <span class="stxt" id="sTxt">Conectando...</span>
@@ -306,17 +313,20 @@ const supa = async (path, opts={}) => {
   const t = await r.text(); return t ? JSON.parse(t) : [];
 };
 
-let allMsgs=[], allAutos=[], allSent=[], contacts={}, selPhone=null, selId=null, msgType='text', outbox={};
+let allMsgs=[], allAutos=[], allSent=[], allNumeros=[], contacts={}, selPhone=null, selId=null, msgType='text', outbox={}, selNumeroId=null;
 
 // ── LOAD ───────────────────────────────────────────────────
 async function loadAll(force=false) {
   try {
     const abaAtiva = document.querySelector('.pane.active')?.id;
-    [allMsgs, allAutos, allSent] = await Promise.all([
-      supa('/mensagens?order=criado_em.desc&limit=500'),
+    const filtroNum = selNumeroId ? '&phone_number_id=eq.'+selNumeroId : '';
+    [allMsgs, allAutos, allSent, allNumeros] = await Promise.all([
+      supa('/mensagens?order=criado_em.desc&limit=500'+filtroNum),
       supa('/automacoes?order=criado_em.asc'),
-      supa('/mensagens_enviadas?order=criado_em.desc&limit=500')
+      supa('/mensagens_enviadas?order=criado_em.desc&limit=500'+(selNumeroId?'&phone_number_id=eq.'+selNumeroId:'')),
+      supa('/numeros?ativo=eq.true&order=criado_em.asc')
     ]);
+    renderNumeroSelector();
     setS(true);
     buildContacts();
     renderContacts();
@@ -433,9 +443,11 @@ async function sendMsg() {
   if (!selPhone) return toast('Selecione um contato');
   const text = document.getElementById('msgIn').value.trim();
   if (!text) return;
-  const token = localStorage.getItem('meta_token');
-  const phoneId = localStorage.getItem('meta_phone_id');
-  if (!token || !phoneId) return toast('⚠️ Configure o Token e Phone ID na aba Automações → Configurações');
+  // Busca credenciais do número selecionado
+  const numSel = allNumeros.find(n=>n.phone_number_id===selNumeroId) || allNumeros[0];
+  const token = numSel?.access_token || localStorage.getItem('meta_token');
+  const phoneId = numSel?.phone_number_id || localStorage.getItem('meta_phone_id');
+  if (!token || !phoneId) return toast('⚠️ Adicione um número na aba Automações → Números');
   try {
     if (msgType === 'cta') await sendCTA(text, token, phoneId);
     else await sendText(text, token, phoneId);
@@ -445,7 +457,8 @@ async function sendMsg() {
 async function sendText(text, token, phoneId) {
   await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'text', text:{ body:text } }, token, phoneId);
   // Salva no Supabase
-  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:text, tipo:'text', botao_texto:'' }) });
+  const numAtual = allNumeros.find(n=>n.phone_number_id===selNumeroId)||allNumeros[0]||{};
+  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:text, tipo:'text', botao_texto:'', phone_number_id:numAtual.phone_number_id||'' }) });
   document.getElementById('msgIn').value='';
   await loadAll();
   renderChat(selPhone); toast('✅ Enviado!');
@@ -462,7 +475,8 @@ async function sendCTA(bodyText, token, phoneId) {
   if (ftr) interactive.footer = { text:ftr };
   await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'interactive', interactive }, token, phoneId);
   // Salva no Supabase
-  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:bodyText, tipo:'cta', botao_texto:btnT }) });
+  const numAtualCTA = allNumeros.find(n=>n.phone_number_id===selNumeroId)||allNumeros[0]||{};
+  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:bodyText, tipo:'cta', botao_texto:btnT, phone_number_id:numAtualCTA.phone_number_id||'' }) });
   document.getElementById('msgIn').value='';
   await loadAll();
   renderChat(selPhone); toast('✅ CTA enviado!');
@@ -487,7 +501,45 @@ function setMT(t, btn) {
 function renderAutos() {
   const el = document.getElementById('autoList');
 
-  // Card de configurações globais (Meta)
+  // Card de números
+  const numerosCard = `
+  <div class="auto-card" style="border-color:rgba(37,211,102,.3);margin-bottom:0">
+    <div class="ac-hdr" onclick="toggleCard('numeros-body', event)">
+      <div class="ac-icon">📱</div>
+      <div class="ac-info">
+        <div class="ac-name">Números WhatsApp</div>
+        <div class="ac-desc">${allNumeros.length} número(s) cadastrado(s)</div>
+      </div>
+      <span style="color:#6b7a99;font-size:12px">▼</span>
+    </div>
+    <div class="ac-body open" id="numeros-body">
+      <div id="numeros-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+        ${allNumeros.length ? allNumeros.map(n => `
+          <div style="background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">${esc(n.nome)}</div>
+              <div style="font-size:11px;color:#6b7a99;font-family:monospace">${esc(n.phone_number_id)}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:10px;padding:2px 8px;border-radius:8px;background:${n.ativo?'rgba(37,211,102,.1)':'rgba(239,68,68,.1)'};color:${n.ativo?'#25d366':'#f87171'};border:1px solid ${n.ativo?'rgba(37,211,102,.2)':'rgba(239,68,68,.2)'}">${n.ativo?'Ativo':'Inativo'}</span>
+              <button class="btn br" style="padding:4px 10px;font-size:11px" onclick="deleteNumero('${n.id}')">🗑</button>
+            </div>
+          </div>
+        `).join('') : '<div style="color:#6b7a99;font-size:12px;padding:8px 0">Nenhum número cadastrado</div>'}
+      </div>
+      <div style="background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:14px">
+        <div style="font-size:11px;color:#25d366;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">+ Adicionar número</div>
+        <div class="field-grid">
+          <div class="field"><label>Nome do número</label><input type="text" id="novoNome" placeholder="Ex: Vendas, Suporte"></div>
+          <div class="field"><label>Phone Number ID</label><input type="text" id="novoPhoneId" placeholder="123456789012345" style="font-family:monospace"></div>
+          <div class="field full"><label>Access Token</label><input type="password" id="novoToken" placeholder="EAAxxxxxxxxxxxxxxx"></div>
+        </div>
+        <button class="btn bg" style="margin-top:10px" onclick="addNumero()">+ Adicionar</button>
+      </div>
+    </div>
+  </div>`;
+
+  // Card de configurações globais (Meta) - mantido para fallback
   const metaToken   = localStorage.getItem('meta_token')||'';
   const metaPhoneId = localStorage.getItem('meta_phone_id')||'';
 
@@ -519,13 +571,13 @@ function renderAutos() {
   </div>`;
 
   if (!allAutos.length) {
-    el.innerHTML = settingsCard + `<div style="text-align:center;color:#6b7a99;font-size:13px;padding:30px">
+    el.innerHTML = numerosCard + settingsCard + `<div style="text-align:center;color:#6b7a99;font-size:13px;padding:30px">
       Nenhuma automação criada.<br><button class="btn bg" style="margin-top:12px" onclick="newAuto()">+ Criar primeira automação</button>
     </div>`;
     return;
   }
 
-  el.innerHTML = settingsCard + allAutos.map(a => buildAutoCard(a)).join('');
+  el.innerHTML = numerosCard + settingsCard + allAutos.map(a => buildAutoCard(a)).join('');
 }
 
 function buildAutoCard(a) {
@@ -713,6 +765,25 @@ async function newAuto() {
   if (last) { document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open')); const el = document.getElementById('abody-'+last.id); if(el) el.classList.add('open'); }
 }
 
+async function addNumero() {
+  const nome    = (document.getElementById('novoNome')||{}).value?.trim();
+  const phoneId = (document.getElementById('novoPhoneId')||{}).value?.trim();
+  const token   = (document.getElementById('novoToken')||{}).value?.trim();
+  if (!nome || !phoneId || !token) return toast('⚠️ Preencha todos os campos');
+  try {
+    await supa('/numeros', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ nome, phone_number_id:phoneId, access_token:token, ativo:true }) });
+    toast('✅ Número adicionado!');
+    loadAll(true);
+  } catch(e) { toast('❌ Erro: ' + e.message); }
+}
+
+async function deleteNumero(id) {
+  if (!confirm('Remover este número?')) return;
+  await supa('/numeros?id=eq.'+id, { method:'DELETE' });
+  toast('🗑 Número removido');
+  loadAll(true);
+}
+
 function saveMetaConfig() {
   const token = document.getElementById('metaTokenInput').value.trim();
   const phone = document.getElementById('metaPhoneInput').value.trim();
@@ -782,6 +853,26 @@ function sw(n) {
 function setS(ok) {
   document.getElementById('sDot').className='sdot'+(ok?' on':'');
   document.getElementById('sTxt').textContent=ok?'Supabase online':'Sem conexão';
+}
+
+function renderNumeroSelector() {
+  const sel = document.getElementById('numSelect');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Todos os números</option>' +
+    allNumeros.map(n => `<option value="${n.phone_number_id}" ${n.phone_number_id===cur?'selected':''}>${esc(n.nome)}</option>`).join('');
+}
+
+function trocarNumero(phoneNumberId) {
+  selNumeroId = phoneNumberId || null;
+  selPhone = null;
+  // Reseta chat
+  document.getElementById('noConv').style.display = 'flex';
+  document.getElementById('chatHdr').style.display = 'none';
+  const ml = document.getElementById('msgList');
+  const ia = document.getElementById('inputArea');
+  if(ml) ml.style.display = 'none';
+  if(ia) ia.style.display = 'none';
+  loadAll(true);
 }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
