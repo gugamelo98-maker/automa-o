@@ -523,7 +523,7 @@ function buildAutoCard(a) {
         <div class="field full">
           <label>Palavras-chave que ativam (separadas por vírgula)</label>
           <div class="kw-wrap" id="kwwrap-${a.id}">
-            ${kws.map(k=>`<span class="kw-tag">${esc(k)}<button onclick="removeKw('${a.id}','${k}')">×</button></span>`).join('')}
+            ${kws.length ? kws.map((k,i)=>`<span class="kw-tag">${esc(k)}<button type="button" onclick="removeKw('${a.id}',${i})">×</button></span>`).join('') : '<span style=\'color:#6b7a99;font-size:11px\'>Nenhuma palavra-chave</span>'}
           </div>
           <div class="kw-input-row">
             <input type="text" id="kwinput-${a.id}" placeholder="Ex: saber mais, quero comprar" onkeydown="if(event.key==='Enter'){addKw('${a.id}');event.preventDefault()}">
@@ -591,28 +591,38 @@ function prevUpdate(id) {
   document.getElementById('prevBtn-'+id).textContent  = '🔗 '+(g('abtnT-'+id)||'Botão');
 }
 
+function renderKws(id) {
+  const a = allAutos.find(x=>x.id===id);
+  if (!a) return;
+  const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
+  const wrap = document.getElementById('kwwrap-'+id);
+  if (!wrap) return;
+  wrap.innerHTML = kws.length
+    ? kws.map((k,i)=>`<span class="kw-tag">${esc(k)}<button type="button" onclick="removeKw('${id}',${i})">×</button></span>`).join('')
+    : '<span style="color:#6b7a99;font-size:11px">Nenhuma palavra-chave</span>';
+}
+
 function addKw(id) {
   const input = document.getElementById('kwinput-'+id);
-  const val = input.value.trim();
+  const val = input.value.trim().toLowerCase();
   if (!val) return;
   const a = allAutos.find(x=>x.id===id);
   if (!a) return;
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
   if (!kws.includes(val)) kws.push(val);
   a.palavras_chave = kws.join(', ');
-  document.getElementById('kwinput-'+id).value='';
-  // Re-render keywords only
-  const wrap = document.getElementById('kwwrap-'+id);
-  wrap.innerHTML = kws.map(k=>`<span class="kw-tag">${esc(k)}<button onclick="removeKw('${id}','${k}')">×</button></span>`).join('');
+  input.value = '';
+  input.focus();
+  renderKws(id);
 }
 
-function removeKw(id, kw) {
+function removeKw(id, idx) {
   const a = allAutos.find(x=>x.id===id);
   if (!a) return;
-  const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(k=>k&&k!==kw);
+  const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
+  kws.splice(idx, 1);
   a.palavras_chave = kws.join(', ');
-  const wrap = document.getElementById('kwwrap-'+id);
-  wrap.innerHTML = kws.map(k=>`<span class="kw-tag">${esc(k)}<button onclick="removeKw('${id}','${k}')">×</button></span>`).join('');
+  renderKws(id);
 }
 
 async function toggleAuto(id, val) {
@@ -630,7 +640,7 @@ async function saveAuto(id) {
   const kws = a?.palavras_chave || '';
   const data = {
     nome:             g('aname-'+id),
-    palavras_chave:   kws,
+    palavras_chave:   kws.split(',').map(k=>k.trim()).filter(Boolean).join(', '),
     mensagem_corpo:   g('abody2-'+id),
     mensagem_header:  g('ahdr-'+id),
     mensagem_footer:  g('aftr-'+id),
@@ -652,7 +662,7 @@ async function deleteAuto(id) {
 async function newAuto() {
   const data = {
     nome: 'Nova automação',
-    palavras_chave: 'saber mais',
+    palavras_chave: '',
     mensagem_corpo: 'Olá, {nome}! Clique no botão abaixo para saber mais.',
     mensagem_header: '',
     mensagem_footer: 'Respondemos em até 2h.',
@@ -769,4 +779,4 @@ loadAll();
 setInterval(loadAll, 7000);
 </script>
 </body>
-</html>
+</html> 
