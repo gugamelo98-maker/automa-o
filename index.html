@@ -367,7 +367,7 @@ function renderContacts(f='') {
 
 function filterC(v) { renderContacts(v); }
 
-function selContact(phone) {
+async function selContact(phone) {
   selPhone = phone;
   selId = contacts[phone]?.id;
   renderContacts();
@@ -378,6 +378,21 @@ function selContact(phone) {
   document.getElementById('hdrName').textContent  = contacts[phone]?.nome || phone;
   document.getElementById('hdrPhone').textContent = phone;
   renderChat(phone);
+  // Marca todas as mensagens desse contato como lidas
+  await marcarTodasLidas(phone);
+}
+
+async function marcarTodasLidas(phone) {
+  try {
+    await supa('/mensagens?telefone=eq.'+phone+'&status=eq.recebido', {
+      method: 'PATCH',
+      body: JSON.stringify({ status: 'respondido' })
+    });
+    // Atualiza localmente sem re-renderizar tudo
+    allMsgs.forEach(m => { if (m.telefone === phone) m.status = 'respondido'; });
+    if (contacts[phone]) contacts[phone].status = 'respondido';
+    renderContacts();
+  } catch(e) { console.error('erro ao marcar lida:', e); }
 }
 
 // ── CHAT ───────────────────────────────────────────────────
