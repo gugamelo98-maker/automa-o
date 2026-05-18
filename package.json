@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Automação n8n: clique no botão do template WhatsApp → responde com mensagem CTA",
   "scripts": {
-    "build": "echo ok"
+    "build": "node -e \"const fs=require('fs');fs.mkdirSync('dist',{recursive:true});fs.copyFileSync('index.html','dist/index.html')\""
   },
   "license": "MIT",
   "engines": {
