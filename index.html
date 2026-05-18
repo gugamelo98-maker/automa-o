@@ -306,15 +306,16 @@ const supa = async (path, opts={}) => {
   const t = await r.text(); return t ? JSON.parse(t) : [];
 };
 
-let allMsgs=[], allAutos=[], contacts={}, selPhone=null, selId=null, msgType='text', outbox={};
+let allMsgs=[], allAutos=[], allSent=[], contacts={}, selPhone=null, selId=null, msgType='text', outbox={};
 
 // ── LOAD ───────────────────────────────────────────────────
 async function loadAll(force=false) {
   try {
     const abaAtiva = document.querySelector('.pane.active')?.id;
-    [allMsgs, allAutos] = await Promise.all([
+    [allMsgs, allAutos, allSent] = await Promise.all([
       supa('/mensagens?order=criado_em.desc&limit=500'),
-      supa('/automacoes?order=criado_em.asc')
+      supa('/automacoes?order=criado_em.asc'),
+      supa('/mensagens_enviadas?order=criado_em.desc&limit=500')
     ]);
     setS(true);
     buildContacts();
@@ -384,8 +385,11 @@ function renderChat(phone) {
   const el = document.getElementById('msgList');
   const recv = allMsgs.filter(m => m.telefone === phone).reverse()
     .map(m => ({ dir:'in', text: m.botao_texto||'—', time: m.criado_em, type:'text' }));
-  const sent = (outbox[phone]||[]);
-  const all = [...recv, ...sent].sort((a,b) => new Date(a.time)-new Date(b.time));
+  // Mensagens enviadas do Supabase + outbox local (ainda não salvas)
+  const sentDB = allSent.filter(m => m.telefone === phone)
+    .map(m => ({ dir:'out', text: m.texto||'—', time: m.criado_em, type: m.tipo||'text', btnText: m.botao_texto||'' }));
+  const sentLocal = (outbox[phone]||[]).filter(o => !sentDB.find(s => Math.abs(new Date(s.time)-new Date(o.time))<3000));
+  const all = [...recv, ...sentDB, ...sentLocal].sort((a,b) => new Date(a.time)-new Date(b.time));
   if (!all.length) { el.innerHTML = '<div style="text-align:center;color:#6b7a99;font-size:12px;padding:20px">Nenhuma mensagem</div>'; return; }
   el.innerHTML = all.map(m => `
     <div class="msg ${m.dir}">
@@ -415,9 +419,10 @@ async function sendMsg() {
 
 async function sendText(text, token, phoneId) {
   await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'text', text:{ body:text } }, token, phoneId);
-  if (!outbox[selPhone]) outbox[selPhone]=[];
-  outbox[selPhone].push({ dir:'out', text, time:new Date().toISOString(), type:'text' });
+  // Salva no Supabase
+  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:text, tipo:'text', botao_texto:'' }) });
   document.getElementById('msgIn').value='';
+  await loadAll();
   renderChat(selPhone); toast('✅ Enviado!');
 }
 
@@ -431,9 +436,10 @@ async function sendCTA(bodyText, token, phoneId) {
   if (hdr) interactive.header = { type:'text', text:hdr };
   if (ftr) interactive.footer = { text:ftr };
   await metaPost({ messaging_product:'whatsapp', recipient_type:'individual', to:selPhone, type:'interactive', interactive }, token, phoneId);
-  if (!outbox[selPhone]) outbox[selPhone]=[];
-  outbox[selPhone].push({ dir:'out', text:bodyText, time:new Date().toISOString(), type:'cta', btnText:btnT });
+  // Salva no Supabase
+  await supa('/mensagens_enviadas', { method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({ telefone:selPhone, nome:contacts[selPhone]?.nome||selPhone, texto:bodyText, tipo:'cta', botao_texto:btnT }) });
   document.getElementById('msgIn').value='';
+  await loadAll();
   renderChat(selPhone); toast('✅ CTA enviado!');
 }
 
