@@ -330,16 +330,26 @@ async function loadAll(force=false) {
 // ── CONTACTS ───────────────────────────────────────────────
 function buildContacts() {
   contacts = {};
-  [...allMsgs].reverse().forEach(m => {
+
+  // Junta recebidas e enviadas com direção
+  const todas = [
+    ...[...allMsgs].map(m => ({ ...m, dir: 'in',  texto: m.botao_texto || '—' })),
+    ...[...allSent].map(m => ({ ...m, dir: 'out', texto: m.texto || '—', status: 'respondido' }))
+  ].sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
+
+  todas.forEach(m => {
     if (!m.telefone) return;
+    const preview = m.dir === 'out' ? '✅ ' + m.texto : m.texto;
     contacts[m.telefone] = {
-      nome: m.nome || m.telefone,
-      ultima: m.botao_texto || '—',
-      time: m.criado_em,
-      status: m.status,
-      id: m.id
+      nome:   m.nome || m.telefone,
+      ultima: preview,
+      time:   m.criado_em,
+      status: m.dir === 'out' ? 'respondido' : (m.status || 'recebido'),
+      id:     m.id,
+      dir:    m.dir
     };
   });
+
   document.getElementById('cntBadge').textContent = Object.keys(contacts).length;
 }
 
@@ -359,7 +369,7 @@ function renderContacts(f='') {
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
         <span class="ctime">${fdt(c.time)}</span>
-        ${c.status==='recebido'?'<span class="unr">!</span>':''}
+        ${c.status==='recebido'&&c.dir!=='out'?'<span class="unr">!</span>':''}
       </div>
     </div>`;
   }).join('');
