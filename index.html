@@ -22,13 +22,18 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .stxt{font-size:11px;color:#6b7a99}
 .pane{display:none;flex:1;overflow:hidden}
 .pane.active{display:flex}
-#pane-auto{flex-direction:column;overflow-y:auto;padding:20px}
-#pane-mon{flex-direction:column;overflow-y:auto;padding:20px}
+#pane-auto,#pane-mon,#pane-nums{flex-direction:column;overflow-y:auto;padding:20px}
 
 /* CHAT */
 #pane-chat{flex-direction:row}
 .sidebar{width:280px;border-right:1px solid #1e2a42;display:flex;flex-direction:column;background:#0d1120;flex-shrink:0}
-.sh{padding:12px 14px;border-bottom:1px solid #1e2a42;display:flex;align-items:center;justify-content:space-between}
+
+/* Seletor de número */
+.num-selector{padding:8px 12px;border-bottom:1px solid #1e2a42;background:#0a0d14}
+.num-selector select{width:100%;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none;cursor:pointer}
+.num-selector select:focus{border-color:#25d366}
+
+.sh{padding:10px 14px;border-bottom:1px solid #1e2a42;display:flex;align-items:center;justify-content:space-between}
 .sh span{font-size:13px;font-weight:700}
 .cbadge{background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
 .sr{padding:8px 12px;border-bottom:1px solid #1e2a42}
@@ -50,6 +55,7 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .ch-info{flex:1}
 .ch-name{font-size:14px;font-weight:700}
 .ch-phone{font-size:11px;color:#6b7a99;font-family:monospace;margin-top:1px}
+.ch-num{font-size:10px;color:#25d366;margin-top:1px}
 .msgs{flex:1;overflow-y:auto;padding:14px 16px 8px;display:flex;flex-direction:column;gap:6px}
 .msg{display:flex;flex-direction:column;max-width:68%}
 .msg.in{align-self:flex-start}
@@ -77,9 +83,24 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .irow{display:flex;gap:8px;align-items:flex-end}
 .irow textarea{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:9px;color:#e8edf5;font-size:13px;padding:9px 12px;outline:none;resize:none;min-height:40px;max-height:110px;font-family:inherit;line-height:1.4}
 .irow textarea:focus{border-color:#25d366}
-.sbtn{width:40px;height:40px;background:#25d366;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.sbtn{width:40px;height:40px;background:#25d366;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sbtn:hover{background:#20c55e}
 .sbtn svg{width:17px;height:17px;fill:#000}
+
+/* NÚMEROS */
+.nums-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.nums-hdr h2{font-size:15px;font-weight:700}
+.nums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.num-card{background:#10141f;border:1px solid #1e2a42;border-radius:12px;padding:20px}
+.num-card.ativo{border-color:rgba(37,211,102,.3)}
+.num-card-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.num-avatar{width:42px;height:42px;border-radius:50%;background:rgba(37,211,102,.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.num-info{flex:1}
+.num-name{font-size:14px;font-weight:700}
+.num-phone{font-size:11px;color:#6b7a99;font-family:monospace;margin-top:2px}
+.num-status{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;margin-top:4px}
+.num-status.on{background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2)}
+.num-status.off{background:rgba(107,122,153,.1);color:#6b7a99;border:1px solid #1e2a42}
 
 /* AUTOMAÇÕES */
 .auto-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
@@ -101,7 +122,7 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .ac-body{display:none;padding:0 18px 18px;border-top:1px solid #1e2a42}
 .ac-body.open{display:block}
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-@media(max-width:640px){.field-grid{grid-column:1fr}}
+@media(max-width:640px){.field-grid{grid-template-columns:1fr}}
 .field{display:flex;flex-direction:column;gap:4px}
 .field.full{grid-column:1/-1}
 .field label{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px}
@@ -112,7 +133,7 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .kw-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
 .kw-tag button{background:none;border:none;color:#25d366;cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 2px}
 .kw-input-row{display:flex;gap:6px;margin-top:8px}
-.kw-input-row input{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:7px 10px;outline:none;font-family:monospace}
+.kw-input-row input{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:7px 10px;outline:none}
 .kw-input-row input:focus{border-color:#25d366}
 .ac-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .preview-box{background:#111b21;border-radius:12px;padding:14px;margin-top:12px;max-width:280px}
@@ -128,8 +149,8 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .mon-hdr h2{font-size:15px;font-weight:700}
 .badge{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2)}
 .tw{background:#10141f;border:1px solid #1e2a42;border-radius:12px;overflow:hidden}
-.tbtop{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #1e2a42;background:#0d1120}
-.tbtop input{flex:1;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none}
+.tbtop{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #1e2a42;background:#0d1120;flex-wrap:wrap}
+.tbtop input{flex:1;min-width:120px;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none}
 .tbtop input:focus{border-color:#25d366}
 .tbtop select{background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none;cursor:pointer}
 table{width:100%;border-collapse:collapse}
@@ -151,11 +172,13 @@ tbody td{padding:11px 14px;font-size:12px}
 .br{background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.2)}.br:hover{background:rgba(239,68,68,.15)}
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center}
 .ov.show{display:flex}
-.mo{background:#10141f;border:1px solid #1e2a42;border-radius:14px;padding:22px;width:100%;max-width:420px;margin:16px}
+.mo{background:#10141f;border:1px solid #1e2a42;border-radius:14px;padding:22px;width:100%;max-width:440px;margin:16px;max-height:90vh;overflow-y:auto}
 .mo h3{font-size:14px;font-weight:700;margin-bottom:16px}
-.mf{margin-bottom:11px}
-.ml2{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.mf{margin-bottom:12px}
+.ml2{font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .mv{font-size:13px;font-family:monospace;color:#e8edf5;word-break:break-all}
+.mo input,.mo textarea{width:100%;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:13px;padding:8px 10px;outline:none;font-family:monospace}
+.mo input:focus,.mo textarea:focus{border-color:#25d366}
 .ma{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
 .toast{position:fixed;bottom:18px;right:18px;background:#25d366;color:#000;font-weight:700;font-size:12px;padding:10px 16px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.4);transform:translateY(60px);opacity:0;transition:all .25s;z-index:999}
 .toast.show{transform:translateY(0);opacity:1}
@@ -174,6 +197,7 @@ tbody td{padding:11px 14px;font-size:12px}
   <div class="nav">
     <button class="tab active" onclick="sw('chat')">💬 Conversas</button>
     <button class="tab" onclick="sw('auto')">⚡ Automações</button>
+    <button class="tab" onclick="sw('nums')">📱 Números</button>
     <button class="tab" onclick="sw('mon')">📊 Monitor</button>
   </div>
   <div class="top-right">
@@ -185,6 +209,11 @@ tbody td{padding:11px 14px;font-size:12px}
 <!-- CHAT -->
 <div class="pane active" id="pane-chat">
   <div class="sidebar">
+    <div class="num-selector">
+      <select id="numSelect" onchange="onNumChange()">
+        <option value="">📱 Todos os números</option>
+      </select>
+    </div>
     <div class="sh"><span>Conversas</span><span class="cbadge" id="cntBadge">0</span></div>
     <div class="sr"><input type="text" placeholder="Buscar..." oninput="filterC(this.value)"></div>
     <div class="clist" id="clist"><div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Carregando...</div></div>
@@ -196,6 +225,7 @@ tbody td{padding:11px 14px;font-size:12px}
       <div class="ch-info">
         <div class="ch-name" id="hdrName"></div>
         <div class="ch-phone" id="hdrPhone"></div>
+        <div class="ch-num" id="hdrNum"></div>
       </div>
     </div>
     <div class="msgs" id="msgList" style="display:none"></div>
@@ -205,7 +235,7 @@ tbody td{padding:11px 14px;font-size:12px}
         <button class="mtt" onclick="setMT('cta',this)">🔗 Botão CTA</button>
       </div>
       <div class="cta-extra" id="ctaExtra">
-        <div><label>Texto do botão (máx 20 chars)</label><input type="text" id="ctaBtnT" maxlength="20" placeholder="Acessar agora"></div>
+        <div><label>Texto do botão (máx 20)</label><input type="text" id="ctaBtnT" maxlength="20" placeholder="Acessar agora"></div>
         <div><label>URL do botão</label><input type="url" id="ctaBtnU" placeholder="https://seusite.com.br"></div>
         <div><label>Header (opcional)</label><input type="text" id="ctaHdr" placeholder="Título"></div>
         <div><label>Footer (opcional)</label><input type="text" id="ctaFtr" placeholder="Rodapé"></div>
@@ -225,11 +255,23 @@ tbody td{padding:11px 14px;font-size:12px}
   <div class="auto-hdr">
     <div>
       <h2>⚡ Automações</h2>
-      <p style="font-size:12px;color:#6b7a99;margin-top:3px">Quando o cliente mandar a palavra-chave, essa mensagem é enviada automaticamente</p>
+      <p style="font-size:12px;color:#6b7a99;margin-top:3px">Válidas para todos os números conectados</p>
     </div>
     <button class="btn bg" onclick="newAuto()">+ Nova automação</button>
   </div>
-  <div class="auto-list" id="autoList"><div style="text-align:center;color:#6b7a99;font-size:13px;padding:40px">Carregando...</div></div>
+  <div class="auto-list" id="autoList"><div style="text-align:center;color:#6b7a99;padding:40px">Carregando...</div></div>
+</div>
+
+<!-- NÚMEROS -->
+<div class="pane" id="pane-nums">
+  <div class="nums-hdr">
+    <div>
+      <h2>📱 Números Conectados</h2>
+      <p style="font-size:12px;color:#6b7a99;margin-top:3px">Gerencie os números da WhatsApp Cloud API</p>
+    </div>
+    <button class="btn bg" onclick="openAddNum()">+ Adicionar número</button>
+  </div>
+  <div class="nums-grid" id="numsGrid"><div style="text-align:center;color:#6b7a99;padding:40px">Carregando...</div></div>
 </div>
 
 <!-- MONITOR -->
@@ -247,30 +289,37 @@ tbody td{padding:11px 14px;font-size:12px}
   <div class="tw">
     <div class="tbtop">
       <input type="text" placeholder="Buscar..." oninput="filterM(this.value)">
+      <select onchange="filterM()" id="mfnum">
+        <option value="">Todos os números</option>
+      </select>
       <select onchange="filterM()" id="mfst">
-        <option value="">Todos</option>
-        <option value="recebido">Recebido</option>
-        <option value="respondido">Respondido</option>
+        <option value="">Todos status</option>
+        <option value="recebido">Novo</option>
+        <option value="respondido">Lido</option>
       </select>
     </div>
     <table>
-      <thead><tr><th>Telefone</th><th>Nome</th><th>Mensagem</th><th>Automação</th><th>Status</th><th>Recebido</th></tr></thead>
+      <thead><tr><th>Telefone</th><th>Nome</th><th>Mensagem</th><th>Número</th><th>Status</th><th>Recebido</th></tr></thead>
       <tbody id="monTbl"><tr><td colspan="6"><div class="empty">Carregando...</div></td></tr></tbody>
     </table>
   </div>
 </div>
 
-<!-- Modal -->
-<div class="ov" id="ov" onclick="if(event.target===this)this.classList.remove('show')">
+<!-- Modal Adicionar Número -->
+<div class="ov" id="ovNum" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="mo">
-    <h3>📲 Detalhe</h3>
-    <div class="mf"><div class="ml2">Telefone</div><div class="mv" id="dPh"></div></div>
-    <div class="mf"><div class="ml2">Nome</div><div class="mv" id="dNm"></div></div>
-    <div class="mf"><div class="ml2">Mensagem</div><div class="mv" id="dBt"></div></div>
-    <div class="mf"><div class="ml2">Recebido em</div><div class="mv" id="dTm"></div></div>
+    <h3 id="numModalTitle">📱 Adicionar Número</h3>
+    <div class="mf"><div class="ml2">Nome / Identificação</div><input type="text" id="numNome" placeholder="Ex: Suporte, Vendas..."></div>
+    <div class="mf"><div class="ml2">Número (com código do país)</div><input type="text" id="numTelefone" placeholder="5548999999999"></div>
+    <div class="mf"><div class="ml2">Phone Number ID</div><input type="text" id="numPhoneId" placeholder="123456789012345"></div>
+    <div class="mf"><div class="ml2">Access Token</div><input type="password" id="numToken" placeholder="EAAxxxxxxx"></div>
+    <div style="background:#161c2d;border:1px solid #1e2a42;border-radius:8px;padding:12px;font-size:11px;color:#6b7a99;line-height:1.7;margin-top:4px">
+      ℹ️ O <b style="color:#e8edf5">Phone Number ID</b> e o <b style="color:#e8edf5">Access Token</b> são obtidos em<br>
+      <b style="color:#25d366">Meta for Developers → WhatsApp → API Setup</b>
+    </div>
     <div class="ma">
-      <button class="btn bg" onclick="markDone()">✅ Marcar respondido</button>
-      <button class="btn bo" onclick="document.getElementById('ov').classList.remove('show')">Fechar</button>
+      <button class="btn bg" onclick="saveNum()">💾 Salvar</button>
+      <button class="btn bo" onclick="document.getElementById('ovNum').classList.remove('show')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -285,74 +334,193 @@ const H = {'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'applicat
 const supa = async (path, opts={}) => {
   const r = await fetch(SURL+path, {headers:H, ...opts});
   const t = await r.text();
+  if (!r.ok) throw new Error(t);
   return t ? JSON.parse(t) : [];
 };
 
-let allMsgs=[], allAutos=[], allSent=[], contacts={};
-let selPhone=null, selId=null, msgType='text';
+let allMsgs=[], allAutos=[], allSent=[], allNums=[], contacts={};
+let selPhone=null, selNumId=null, filterNumId='', msgType='text';
+let editingNumId = null;
 
 // ── LOAD ──────────────────────────────────────────────────
 async function loadAll(force=false) {
   try {
     const aba = document.querySelector('.pane.active')?.id;
-    [allMsgs, allAutos, allSent] = await Promise.all([
+    [allMsgs, allAutos, allSent, allNums] = await Promise.all([
       supa('/mensagens?order=criado_em.asc&limit=500'),
       supa('/automacoes?order=criado_em.asc'),
-      supa('/mensagens_enviadas?order=criado_em.asc&limit=500')
+      supa('/mensagens_enviadas?order=criado_em.asc&limit=500'),
+      supa('/numeros?order=criado_em.asc')
     ]);
     setS(true);
+    renderNumSelector();
     buildContacts();
     renderContacts();
     if (force || aba !== 'pane-auto') renderAutos();
+    renderNums();
     renderMonitor();
     if (selPhone) renderChat(selPhone);
-  } catch(e) { setS(false); }
+  } catch(e) { setS(false); console.error(e); }
+}
+
+// ── NÚMEROS ───────────────────────────────────────────────
+function renderNumSelector() {
+  const sel = document.getElementById('numSelect');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">📱 Todos os números</option>' +
+    allNums.filter(n=>n.ativo).map(n=>`<option value="${n.id}">${esc(n.nome)} — ${esc(n.telefone||'')}</option>`).join('');
+  sel.value = cur;
+
+  // Monitor filter
+  const mfnum = document.getElementById('mfnum');
+  if (mfnum) {
+    mfnum.innerHTML = '<option value="">Todos os números</option>' +
+      allNums.map(n=>`<option value="${n.id}">${esc(n.nome)}</option>`).join('');
+  }
+}
+
+function onNumChange() {
+  filterNumId = document.getElementById('numSelect').value;
+  selPhone = null;
+  document.getElementById('noConv').style.display = 'flex';
+  document.getElementById('chatHdr').style.display = 'none';
+  document.getElementById('msgList').style.display = 'none';
+  document.getElementById('inputArea').style.display = 'none';
+  buildContacts();
+  renderContacts();
+}
+
+function renderNums() {
+  const el = document.getElementById('numsGrid');
+  if (!allNums.length) {
+    el.innerHTML = `<div style="text-align:center;color:#6b7a99;padding:40px;grid-column:1/-1">
+      Nenhum número conectado.<br><button class="btn bg" style="margin-top:12px" onclick="openAddNum()">+ Adicionar primeiro número</button>
+    </div>`;
+    return;
+  }
+  el.innerHTML = allNums.map(n => `
+    <div class="num-card${n.ativo?' ativo':''}">
+      <div class="num-card-hdr">
+        <div class="num-avatar">📱</div>
+        <div class="num-info">
+          <div class="num-name">${esc(n.nome||'Sem nome')}</div>
+          <div class="num-phone">${esc(n.telefone||'—')}</div>
+          <span class="num-status ${n.ativo?'on':'off'}">${n.ativo?'● Ativo':'○ Inativo'}</span>
+        </div>
+        <label class="toggle" title="${n.ativo?'Desativar':'Ativar'}">
+          <input type="checkbox" ${n.ativo?'checked':''} onchange="toggleNum('${n.id}',this.checked)">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <div style="font-size:11px;color:#6b7a99;margin-bottom:12px;font-family:monospace">
+        ID: ${esc(n.phone_number_id||'—')}
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn bo" style="flex:1" onclick="openEditNum('${n.id}')">✏️ Editar</button>
+        <button class="btn br" onclick="deleteNum('${n.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function openAddNum() {
+  editingNumId = null;
+  document.getElementById('numModalTitle').textContent = '📱 Adicionar Número';
+  document.getElementById('numNome').value = '';
+  document.getElementById('numTelefone').value = '';
+  document.getElementById('numPhoneId').value = '';
+  document.getElementById('numToken').value = '';
+  document.getElementById('ovNum').classList.add('show');
+}
+
+function openEditNum(id) {
+  const n = allNums.find(x=>x.id===id); if(!n) return;
+  editingNumId = id;
+  document.getElementById('numModalTitle').textContent = '✏️ Editar Número';
+  document.getElementById('numNome').value = n.nome||'';
+  document.getElementById('numTelefone').value = n.telefone||'';
+  document.getElementById('numPhoneId').value = n.phone_number_id||'';
+  document.getElementById('numToken').value = n.access_token||'';
+  document.getElementById('ovNum').classList.add('show');
+}
+
+async function saveNum() {
+  const data = {
+    nome:            document.getElementById('numNome').value.trim(),
+    telefone:        document.getElementById('numTelefone').value.trim(),
+    phone_number_id: document.getElementById('numPhoneId').value.trim(),
+    access_token:    document.getElementById('numToken').value.trim(),
+    ativo: true
+  };
+  if (!data.nome || !data.phone_number_id || !data.access_token) return toast('⚠️ Preencha todos os campos obrigatórios');
+  try {
+    if (editingNumId) {
+      await supa('/numeros?id=eq.'+editingNumId, {method:'PATCH', body:JSON.stringify(data)});
+      toast('✅ Número atualizado!');
+    } else {
+      await supa('/numeros', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(data)});
+      toast('✅ Número adicionado!');
+    }
+    document.getElementById('ovNum').classList.remove('show');
+    loadAll(true);
+  } catch(e) { toast('❌ Erro: '+e.message); }
+}
+
+async function toggleNum(id, val) {
+  await supa('/numeros?id=eq.'+id, {method:'PATCH', body:JSON.stringify({ativo:val})});
+  toast(val ? '✅ Número ativado' : '⏸ Número desativado');
+  loadAll(true);
+}
+
+async function deleteNum(id) {
+  if (!confirm('Remover este número?')) return;
+  await supa('/numeros?id=eq.'+id, {method:'DELETE'});
+  toast('🗑 Removido'); loadAll(true);
+}
+
+function getNumByPhoneId(phoneNumberId) {
+  return allNums.find(n => n.phone_number_id === phoneNumberId);
+}
+
+function getNumForContact(phone) {
+  // Pega o número pelo qual essa conversa está acontecendo
+  const msg = [...allMsgs].reverse().find(m => m.telefone === phone);
+  if (msg?.numero_id) return allNums.find(n=>n.id===msg.numero_id);
+  // Fallback: primeiro número ativo
+  return allNums.find(n=>n.ativo);
 }
 
 // ── CONTACTS ─────────────────────────────────────────────
 function buildContacts() {
   contacts = {};
-
-  // Todas as mensagens (recebidas + enviadas) ordenadas por tempo
   const todas = [
-    ...allMsgs.map(m => ({
-      telefone: m.telefone,
-      nome: m.nome || m.telefone,
-      preview: m.botao_texto || '—',
-      time: m.criado_em,
-      dir: 'in',
-      status: m.status,
-      id: m.id
+    ...allMsgs.filter(m => !filterNumId || m.numero_id === filterNumId).map(m => ({
+      telefone: m.telefone, nome: m.nome||m.telefone,
+      preview: m.botao_texto||'—', time: m.criado_em,
+      dir:'in', status: m.status, id: m.id, numero_id: m.numero_id
     })),
-    ...allSent.map(m => ({
-      telefone: m.telefone,
-      nome: m.nome || m.telefone,
-      preview: '✉️ ' + (m.texto || '—'),
-      time: m.criado_em,
-      dir: 'out',
-      status: 'respondido',
-      id: m.id
+    ...allSent.filter(m => !filterNumId || m.numero_id === filterNumId).map(m => ({
+      telefone: m.telefone, nome: m.nome||m.telefone,
+      preview: '✉️ '+(m.texto||'—'), time: m.criado_em,
+      dir:'out', status:'respondido', id: m.id, numero_id: m.numero_id
     }))
-  ].sort((a,b) => new Date(a.time) - new Date(b.time));
+  ].sort((a,b) => new Date(a.time)-new Date(b.time));
 
-  // Monta contatos com a última mensagem de qualquer direção
   todas.forEach(m => {
     if (!m.telefone) return;
     if (!contacts[m.telefone]) {
-      contacts[m.telefone] = { nome: m.nome, preview: m.preview, time: m.time, status: m.status, id: m.id };
+      contacts[m.telefone] = {nome:m.nome, preview:m.preview, time:m.time, status:m.status, id:m.id, numero_id:m.numero_id};
     } else {
       contacts[m.telefone].preview = m.preview;
       contacts[m.telefone].time    = m.time;
-      // Só marca como não lido se for mensagem recebida
-      if (m.dir === 'in' && m.status === 'recebido') {
+      if (m.dir==='in' && m.status==='recebido') {
         contacts[m.telefone].status = 'recebido';
         contacts[m.telefone].id = m.id;
-      } else if (m.dir === 'out') {
+      } else if (m.dir==='out') {
         contacts[m.telefone].status = 'respondido';
       }
     }
   });
-
   document.getElementById('cntBadge').textContent = Object.keys(contacts).length;
 }
 
@@ -360,20 +528,18 @@ function renderContacts(f='') {
   const phones = Object.keys(contacts).filter(p =>
     !f || contacts[p].nome.toLowerCase().includes(f.toLowerCase()) || p.includes(f)
   );
+  phones.sort((a,b) => new Date(contacts[b].time)-new Date(contacts[a].time));
   const el = document.getElementById('clist');
-  if (!phones.length) {
-    el.innerHTML = '<div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Nenhum contato ainda</div>';
-    return;
-  }
-  // Ordena por tempo (mais recente primeiro)
-  phones.sort((a,b) => new Date(contacts[b].time) - new Date(contacts[a].time));
+  if (!phones.length) { el.innerHTML='<div style="padding:16px;text-align:center;color:#6b7a99;font-size:12px">Nenhum contato</div>'; return; }
   el.innerHTML = phones.map(p => {
     const c = contacts[p];
+    const num = allNums.find(n=>n.id===c.numero_id);
     return `<div class="ci${p===selPhone?' sel':''}" onclick="selContact('${p}')">
       <div class="av g">👤</div>
       <div class="cinfo">
         <div class="cname">${esc(c.nome)}</div>
         <div class="cprev">${esc(c.preview)}</div>
+        ${num?`<div style="font-size:9px;color:#25d366;margin-top:1px">via ${esc(num.nome)}</div>`:''}
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
         <span class="ctime">${fdt(c.time)}</span>
@@ -387,25 +553,24 @@ function filterC(v) { renderContacts(v); }
 
 async function selContact(phone) {
   selPhone = phone;
-  selId = contacts[phone]?.id;
+  const c = contacts[phone];
   renderContacts();
   document.getElementById('noConv').style.display   = 'none';
   document.getElementById('chatHdr').style.display  = 'flex';
   document.getElementById('msgList').style.display  = 'flex';
   document.getElementById('inputArea').style.display = 'block';
-  document.getElementById('hdrName').textContent  = contacts[phone]?.nome || phone;
+  document.getElementById('hdrName').textContent  = c?.nome || phone;
   document.getElementById('hdrPhone').textContent = phone;
+  const num = allNums.find(n=>n.id===c?.numero_id);
+  document.getElementById('hdrNum').textContent = num ? '📱 via '+num.nome : '';
   renderChat(phone);
-  // Marca como lido
   await marcarLidas(phone);
 }
 
 async function marcarLidas(phone) {
   try {
-    await supa('/mensagens?telefone=eq.'+phone+'&status=eq.recebido', {
-      method:'PATCH', body:JSON.stringify({status:'respondido'})
-    });
-    allMsgs.forEach(m => { if (m.telefone===phone) m.status='respondido'; });
+    await supa('/mensagens?telefone=eq.'+phone+'&status=eq.recebido', {method:'PATCH', body:JSON.stringify({status:'respondido'})});
+    allMsgs.forEach(m => { if(m.telefone===phone) m.status='respondido'; });
     if (contacts[phone]) contacts[phone].status = 'respondido';
     renderContacts();
   } catch(e) {}
@@ -414,19 +579,13 @@ async function marcarLidas(phone) {
 // ── CHAT ─────────────────────────────────────────────────
 function renderChat(phone) {
   const el = document.getElementById('msgList');
-  const recv = allMsgs
-    .filter(m => m.telefone === phone)
-    .map(m => ({ dir:'in', text: m.botao_texto||'—', time: m.criado_em, tipo:'text' }));
-  const sent = allSent
-    .filter(m => m.telefone === phone)
-    .map(m => ({ dir:'out', text: m.texto||'—', time: m.criado_em, tipo: m.tipo||'text', btnText: m.botao_texto||'' }));
-  const all = [...recv, ...sent].sort((a,b) => new Date(a.time)-new Date(b.time));
-
-  if (!all.length) {
-    el.innerHTML = '<div style="text-align:center;color:#6b7a99;font-size:12px;padding:20px">Nenhuma mensagem</div>';
-    return;
-  }
-  el.innerHTML = all.map(m => `
+  const recv = allMsgs.filter(m=>m.telefone===phone)
+    .map(m=>({dir:'in',text:m.botao_texto||'—',time:m.criado_em,tipo:'text'}));
+  const sent = allSent.filter(m=>m.telefone===phone)
+    .map(m=>({dir:'out',text:m.texto||'—',time:m.criado_em,tipo:m.tipo||'text',btnText:m.botao_texto||''}));
+  const all = [...recv,...sent].sort((a,b)=>new Date(a.time)-new Date(b.time));
+  if (!all.length) { el.innerHTML='<div style="text-align:center;color:#6b7a99;font-size:12px;padding:20px">Nenhuma mensagem</div>'; return; }
+  el.innerHTML = all.map(m=>`
     <div class="msg ${m.dir}">
       ${m.dir==='in'?`<div class="mfrom">👤 ${esc(contacts[phone]?.nome||phone)}</div>`:''}
       <div class="bbl${m.tipo==='cta'?' cta':''}">
@@ -443,24 +602,23 @@ async function sendMsg() {
   if (!selPhone) return toast('Selecione um contato');
   const text = document.getElementById('msgIn').value.trim();
   if (!text) return;
-  const token   = localStorage.getItem('meta_token');
-  const phoneId = localStorage.getItem('meta_phone_id');
-  if (!token || !phoneId) return toast('⚠️ Configure o Token e Phone ID em Automações');
+  const num = getNumForContact(selPhone);
+  if (!num) return toast('⚠️ Nenhum número ativo. Adicione em 📱 Números');
   try {
-    if (msgType === 'cta') await sendCTA(text, token, phoneId);
-    else await sendText(text, token, phoneId);
+    if (msgType==='cta') await sendCTA(text, num);
+    else await sendText(text, num);
   } catch(e) { toast('❌ '+e.message); }
 }
 
-async function sendText(text, token, phoneId) {
-  await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'text',text:{body:text}}, token, phoneId);
-  await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:text,tipo:'text',botao_texto:''})});
+async function sendText(text, num) {
+  await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'text',text:{body:text}}, num.access_token, num.phone_number_id);
+  await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:text,tipo:'text',botao_texto:'',numero_id:num.id})});
   document.getElementById('msgIn').value='';
   await loadAll();
   toast('✅ Enviado!');
 }
 
-async function sendCTA(bodyText, token, phoneId) {
+async function sendCTA(bodyText, num) {
   const btnT = document.getElementById('ctaBtnT').value.trim();
   const btnU = document.getElementById('ctaBtnU').value.trim();
   const hdr  = document.getElementById('ctaHdr').value.trim();
@@ -469,8 +627,8 @@ async function sendCTA(bodyText, token, phoneId) {
   const interactive = {type:'cta_url',body:{text:bodyText},action:{name:'cta_url',parameters:{display_text:btnT.substring(0,20),url:btnU}}};
   if (hdr) interactive.header={type:'text',text:hdr};
   if (ftr) interactive.footer={text:ftr};
-  await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'interactive',interactive}, token, phoneId);
-  await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:bodyText,tipo:'cta',botao_texto:btnT})});
+  await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'interactive',interactive}, num.access_token, num.phone_number_id);
+  await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:bodyText,tipo:'cta',botao_texto:btnT,numero_id:num.id})});
   document.getElementById('msgIn').value='';
   await loadAll();
   toast('✅ CTA enviado!');
@@ -494,32 +652,13 @@ function setMT(t, btn) {
 // ── AUTOMAÇÕES ────────────────────────────────────────────
 function renderAutos() {
   const el = document.getElementById('autoList');
-  const metaToken   = localStorage.getItem('meta_token')||'';
-  const metaPhoneId = localStorage.getItem('meta_phone_id')||'';
-
-  const settingsCard = `
-  <div class="auto-card" style="border-color:rgba(59,130,246,.3)">
-    <div class="ac-hdr" onclick="toggleCard('settings-body',event)">
-      <div class="ac-icon">🔑</div>
-      <div class="ac-info"><div class="ac-name">Configurações Meta API</div><div class="ac-desc">Access Token e Phone Number ID</div></div>
-      <span style="color:#6b7a99;font-size:11px">▼</span>
-    </div>
-    <div class="ac-body open" id="settings-body">
-      <div class="field-grid">
-        <div class="field full"><label>Access Token</label><input type="password" id="metaTokenInput" value="${metaToken}" placeholder="EAAxxxxxxx"></div>
-        <div class="field full"><label>Phone Number ID</label><input type="text" id="metaPhoneInput" value="${metaPhoneId}" placeholder="123456789012345"></div>
-      </div>
-      <div class="ac-actions"><button class="btn bg" onclick="saveMetaConfig()">💾 Salvar</button></div>
-    </div>
-  </div>`;
-
   if (!allAutos.length) {
-    el.innerHTML = settingsCard + `<div style="text-align:center;color:#6b7a99;font-size:13px;padding:30px">
+    el.innerHTML = `<div style="text-align:center;color:#6b7a99;font-size:13px;padding:30px">
       Nenhuma automação criada.<br><button class="btn bg" style="margin-top:12px" onclick="newAuto()">+ Criar primeira automação</button>
     </div>`;
     return;
   }
-  el.innerHTML = settingsCard + allAutos.map(a => buildAutoCard(a)).join('');
+  el.innerHTML = allAutos.map(a => buildAutoCard(a)).join('');
 }
 
 function buildAutoCard(a) {
@@ -542,7 +681,7 @@ function buildAutoCard(a) {
       <div class="field-grid">
         <div class="field full"><label>Nome da automação</label><input type="text" id="aname-${a.id}" value="${esc(a.nome||'')}"></div>
         <div class="field full">
-          <label>Palavras-chave que ativam esta automação</label>
+          <label>Palavras-chave (vale para todos os números)</label>
           <div class="kw-wrap" id="kwwrap-${a.id}">
             ${kws.length ? kws.map((k,i)=>`<span class="kw-tag">${esc(k)}<button type="button" onclick="removeKw('${a.id}',${i})">×</button></span>`).join('') : '<span style="color:#6b7a99;font-size:11px">Nenhuma palavra-chave</span>'}
           </div>
@@ -550,9 +689,9 @@ function buildAutoCard(a) {
             <input type="text" id="kwinput-${a.id}" placeholder="Ex: saber mais" onkeydown="if(event.key==='Enter'){addKw('${a.id}');event.preventDefault()}">
             <button class="btn bo" type="button" onclick="addKw('${a.id}')">+ Add</button>
           </div>
-          <div class="info-tag">ℹ️ O cliente manda qualquer uma dessas palavras → automação dispara</div>
+          <div class="info-tag">ℹ️ Funciona em todos os números conectados</div>
         </div>
-        <div class="field full"><label>Corpo da mensagem <span style="color:#6b7a99">(use {nome} para personalizar)</span></label><textarea id="abody2-${a.id}" rows="3" oninput="prevUpdate('${a.id}')">${esc(a.mensagem_corpo||'')}</textarea></div>
+        <div class="field full"><label>Corpo da mensagem (use {nome} para personalizar)</label><textarea id="abody2-${a.id}" rows="3" oninput="prevUpdate('${a.id}')">${esc(a.mensagem_corpo||'')}</textarea></div>
         <div class="field"><label>Header (opcional)</label><input type="text" id="ahdr-${a.id}" value="${esc(a.mensagem_header||'')}" oninput="prevUpdate('${a.id}')"></div>
         <div class="field"><label>Footer (opcional)</label><input type="text" id="aftr-${a.id}" value="${esc(a.mensagem_footer||'')}" oninput="prevUpdate('${a.id}')"></div>
         <div class="field"><label>Texto do botão (máx 20)</label><input type="text" id="abtnT-${a.id}" value="${esc(a.botao_texto||'')}" maxlength="20" oninput="prevUpdate('${a.id}')"></div>
@@ -560,14 +699,12 @@ function buildAutoCard(a) {
       </div>
       <div style="margin-top:14px">
         <div style="font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Preview</div>
-        <div class="preview-box">
-          <div class="prev-bbl">
-            <div class="prev-hdr" id="prevHdr-${a.id}">${esc(a.mensagem_header||'')}</div>
-            <div class="prev-body" id="prevBody-${a.id}">${esc((a.mensagem_corpo||'').replace('{nome}','João'))}</div>
-            <div class="prev-ftr" id="prevFtr-${a.id}">${esc(a.mensagem_footer||'')}</div>
-            <div class="prev-btn" id="prevBtn-${a.id}">🔗 ${esc(a.botao_texto||'Botão')}</div>
-          </div>
-        </div>
+        <div class="preview-box"><div class="prev-bbl">
+          <div class="prev-hdr" id="prevHdr-${a.id}">${esc(a.mensagem_header||'')}</div>
+          <div class="prev-body" id="prevBody-${a.id}">${esc((a.mensagem_corpo||'').replace('{nome}','João'))}</div>
+          <div class="prev-ftr" id="prevFtr-${a.id}">${esc(a.mensagem_footer||'')}</div>
+          <div class="prev-btn" id="prevBtn-${a.id}">🔗 ${esc(a.botao_texto||'Botão')}</div>
+        </div></div>
       </div>
       <div class="ac-actions">
         <button class="btn bg" onclick="saveAuto('${a.id}')">💾 Salvar</button>
@@ -582,28 +719,23 @@ function toggleCard(id, e) {
   const el = document.getElementById(id);
   if (!el) return;
   const isOpen = el.classList.contains('open');
-  document.querySelectorAll('.ac-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open'));
   if (!isOpen) el.classList.add('open');
 }
 
 function prevUpdate(id) {
   const g = i => (document.getElementById(i)||{}).value||'';
-  const hdr = document.getElementById('prevHdr-'+id);
-  const body = document.getElementById('prevBody-'+id);
-  const ftr = document.getElementById('prevFtr-'+id);
-  const btn = document.getElementById('prevBtn-'+id);
-  if (hdr)  hdr.textContent  = g('ahdr-'+id);
-  if (body) body.textContent = g('abody2-'+id).replace('{nome}','João');
-  if (ftr)  ftr.textContent  = g('aftr-'+id);
-  if (btn)  btn.textContent  = '🔗 '+(g('abtnT-'+id)||'Botão');
+  const set = (i,v) => { const e=document.getElementById(i); if(e) e.textContent=v; };
+  set('prevHdr-'+id,  g('ahdr-'+id));
+  set('prevBody-'+id, g('abody2-'+id).replace('{nome}','João'));
+  set('prevFtr-'+id,  g('aftr-'+id));
+  set('prevBtn-'+id,  '🔗 '+(g('abtnT-'+id)||'Botão'));
 }
 
 function renderKws(id) {
-  const a = allAutos.find(x=>x.id===id);
-  if (!a) return;
+  const a = allAutos.find(x=>x.id===id); if(!a) return;
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
-  const wrap = document.getElementById('kwwrap-'+id);
-  if (!wrap) return;
+  const wrap = document.getElementById('kwwrap-'+id); if(!wrap) return;
   wrap.innerHTML = kws.length
     ? kws.map((k,i)=>`<span class="kw-tag">${esc(k)}<button type="button" onclick="removeKw('${id}',${i})">×</button></span>`).join('')
     : '<span style="color:#6b7a99;font-size:11px">Nenhuma palavra-chave</span>';
@@ -613,32 +745,27 @@ function addKw(id) {
   const input = document.getElementById('kwinput-'+id);
   const val = input.value.trim().toLowerCase();
   if (!val) return;
-  const a = allAutos.find(x=>x.id===id);
-  if (!a) return;
+  const a = allAutos.find(x=>x.id===id); if(!a) return;
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
   if (!kws.map(k=>k.toLowerCase()).includes(val)) kws.push(val);
   a.palavras_chave = kws.join(', ');
-  input.value = '';
-  input.focus();
+  input.value=''; input.focus();
   renderKws(id);
 }
 
 function removeKw(id, idx) {
-  const a = allAutos.find(x=>x.id===id);
-  if (!a) return;
+  const a = allAutos.find(x=>x.id===id); if(!a) return;
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
-  kws.splice(idx, 1);
+  kws.splice(idx,1);
   a.palavras_chave = kws.join(', ');
   renderKws(id);
 }
 
 async function toggleAuto(id, val) {
   await supa('/automacoes?id=eq.'+id, {method:'PATCH', body:JSON.stringify({ativo:val})});
-  const a = allAutos.find(x=>x.id===id);
-  if (a) a.ativo = val;
-  const card = document.getElementById('acard-'+id);
-  if (card) card.classList.toggle('enabled', val);
-  toast(val ? '✅ Automação ativada' : '⏸ Automação pausada');
+  const a = allAutos.find(x=>x.id===id); if(a) a.ativo=val;
+  document.getElementById('acard-'+id)?.classList.toggle('enabled',val);
+  toast(val?'✅ Automação ativada':'⏸ Automação pausada');
 }
 
 async function saveAuto(id) {
@@ -651,12 +778,10 @@ async function saveAuto(id) {
     mensagem_header: g('ahdr-'+id),
     mensagem_footer: g('aftr-'+id),
     botao_texto:     g('abtnT-'+id),
-    botao_url:       g('abtnU-'+id),
-    access_token:    localStorage.getItem('meta_token')||''
+    botao_url:       g('abtnU-'+id)
   };
   await supa('/automacoes?id=eq.'+id, {method:'PATCH', body:JSON.stringify(data)});
-  toast('✅ Automação salva!');
-  loadAll(true);
+  toast('✅ Automação salva!'); loadAll(true);
 }
 
 async function deleteAuto(id) {
@@ -666,61 +791,41 @@ async function deleteAuto(id) {
 }
 
 async function newAuto() {
-  const data = {nome:'Nova automação',palavras_chave:'',mensagem_corpo:'Olá, {nome}! Clique no botão abaixo.',mensagem_header:'',mensagem_footer:'Respondemos em até 2h.',botao_texto:'Acessar agora',botao_url:'https://seusite.com.br',ativo:false,access_token:localStorage.getItem('meta_token')||''};
+  const data = {nome:'Nova automação',palavras_chave:'',mensagem_corpo:'Olá, {nome}! Clique no botão abaixo.',mensagem_header:'',mensagem_footer:'Respondemos em até 2h.',botao_texto:'Acessar agora',botao_url:'https://seusite.com.br',ativo:false};
   await supa('/automacoes', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(data)});
   toast('✅ Criada! Configure abaixo.');
-  await loadAll(true);
-  sw('auto');
+  await loadAll(true); sw('auto');
   const last = allAutos[allAutos.length-1];
-  if (last) { document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open')); const el=document.getElementById('abody-'+last.id); if(el) el.classList.add('open'); }
-}
-
-function saveMetaConfig() {
-  localStorage.setItem('meta_token', document.getElementById('metaTokenInput').value.trim());
-  localStorage.setItem('meta_phone_id', document.getElementById('metaPhoneInput').value.trim());
-  toast('✅ Credenciais salvas!');
+  if (last) { document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open')); document.getElementById('abody-'+last.id)?.classList.add('open'); }
 }
 
 // ── MONITOR ──────────────────────────────────────────────
 function renderMonitor() {
-  filterM();
-  document.getElementById('totBadge').textContent = allMsgs.length;
+  filterM(); document.getElementById('totBadge').textContent = allMsgs.length;
 }
 
 function filterM(v) {
-  const q = v !== undefined ? v.toLowerCase() : (document.querySelector('#pane-mon input')||{value:''}).value.toLowerCase();
-  const s = (document.getElementById('mfst')||{}).value||'';
-  const list = allMsgs.filter(m => {
-    const mq = !q || (m.telefone||'').includes(q) || (m.nome||'').toLowerCase().includes(q);
-    const ms = !s || m.status===s;
-    return mq && ms;
+  const q = v!==undefined ? v.toLowerCase() : (document.querySelector('#pane-mon input')||{value:''}).value.toLowerCase();
+  const s = document.getElementById('mfst')?.value||'';
+  const nid = document.getElementById('mfnum')?.value||'';
+  const list = [...allMsgs].reverse().filter(m => {
+    const mq = !q||(m.telefone||'').includes(q)||(m.nome||'').toLowerCase().includes(q);
+    const ms = !s||m.status===s;
+    const mn = !nid||m.numero_id===nid;
+    return mq&&ms&&mn;
   });
   const tb = document.getElementById('monTbl');
   if (!list.length) { tb.innerHTML='<tr><td colspan="6"><div class="empty">Nenhuma mensagem</div></td></tr>'; return; }
-  tb.innerHTML = [...list].reverse().map(m => `<tr onclick="openMon('${m.id}')">
-    <td><span class="pc">${esc(m.telefone||'—')}</span></td>
-    <td>${esc(m.nome||'—')}</td>
-    <td>${esc(m.botao_texto||'—')}</td>
-    <td style="color:#25d366;font-size:11px">${esc(m.botao_payload||'—')}</td>
-    <td><span class="sp ${m.status||'recebido'}">${m.status==='respondido'?'✅ Lido':'📩 Novo'}</span></td>
-    <td style="color:#6b7a99;font-size:11px;font-family:monospace">${fdtFull(m.criado_em)}</td>
-  </tr>`).join('');
-}
-
-function openMon(id) {
-  const m = allMsgs.find(x=>x.id===id); if(!m) return;
-  selId = id;
-  document.getElementById('dPh').textContent = m.telefone||'—';
-  document.getElementById('dNm').textContent = m.nome||'—';
-  document.getElementById('dBt').textContent = m.botao_texto||'—';
-  document.getElementById('dTm').textContent = fdtFull(m.criado_em);
-  document.getElementById('ov').classList.add('show');
-}
-
-async function markDone() {
-  if (!selId) return;
-  await supa('/mensagens?id=eq.'+selId, {method:'PATCH', body:JSON.stringify({status:'respondido'})});
-  toast('✅ Marcado'); document.getElementById('ov').classList.remove('show'); loadAll();
+  tb.innerHTML = list.map(m => {
+    const num = allNums.find(n=>n.id===m.numero_id);
+    return `<tr>
+      <td><span class="pc">${esc(m.telefone||'—')}</span></td>
+      <td>${esc(m.nome||'—')}</td>
+      <td>${esc(m.botao_texto||'—')}</td>
+      <td style="color:#25d366;font-size:11px">${esc(num?.nome||'—')}</td>
+      <td><span class="sp ${m.status||'recebido'}">${m.status==='respondido'?'✅ Lido':'📩 Novo'}</span></td>
+      <td style="color:#6b7a99;font-size:11px;font-family:monospace">${fdtFull(m.criado_em)}</td>
+    </tr>`;}).join('');
 }
 
 async function clearMsgs() {
@@ -731,40 +836,30 @@ async function clearMsgs() {
 
 // ── UTILS ────────────────────────────────────────────────
 function sw(n) {
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['chat','auto','mon'][i]===n));
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['chat','auto','nums','mon'][i]===n));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
   document.getElementById('pane-'+n).classList.add('active');
 }
-
 function setS(ok) {
   document.getElementById('sDot').className='sdot'+(ok?' on':'');
   document.getElementById('sTxt').textContent=ok?'Supabase online':'Sem conexão';
 }
-
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function fdt(iso) {
-  if (!iso) return '—';
-  const d=new Date(iso), now=new Date(), diff=now-d;
-  if (diff<60000) return 'agora';
-  if (diff<3600000) return Math.floor(diff/60000)+'m';
-  if (diff<86400000) return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fdt(iso){
+  if(!iso)return'—';const d=new Date(iso),now=new Date(),diff=now-d;
+  if(diff<60000)return'agora';if(diff<3600000)return Math.floor(diff/60000)+'m';
+  if(diff<86400000)return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   return d.toLocaleDateString('pt-BR');
 }
-
-function fdtFull(iso) {
-  if (!iso) return '—';
-  const d=new Date(iso);
+function fdtFull(iso){
+  if(!iso)return'—';const d=new Date(iso);
   return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 }
-
-function toast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ── INIT ─────────────────────────────────────────────────
 loadAll();
 setInterval(loadAll, 7000);
 </script>
