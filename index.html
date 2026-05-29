@@ -655,8 +655,11 @@ function setMT(t, btn) {
 
 // ── AUTOMAÇÕES ────────────────────────────────────────────
 function getAutoType(a) {
-  // Compatibilidade: se não tem tipo_mensagem salvo, verifica se tem botão configurado
-  if (a.tipo_mensagem) return a.tipo_mensagem;
+  // _tipoTemp tem prioridade absoluta (escolha feita na UI, ainda não salva)
+  if (a._tipoTemp !== undefined) return a._tipoTemp;
+  // tipo_mensagem salvo no banco
+  if (a.tipo_mensagem === 'cta' || a.tipo_mensagem === 'text') return a.tipo_mensagem;
+  // fallback para automações antigas sem tipo_mensagem
   if (a.botao_texto || a.botao_url) return 'cta';
   return 'text';
 }
@@ -768,7 +771,8 @@ function buildAutoCard(a) {
 // Alterna o tipo de mensagem da automação no card (sem salvar ainda)
 function setAutoType(id, tipo) {
   const a = allAutos.find(x=>x.id===id); if(!a) return;
-  a._tipoTemp = tipo; // guarda temporariamente sem salvar
+  // Salva no objeto em memória — _tipoTemp tem prioridade sobre tipo_mensagem do banco
+  a._tipoTemp = tipo;
 
   const isCta = tipo === 'cta';
 
@@ -843,8 +847,8 @@ async function toggleAuto(id, val) {
 async function saveAuto(id) {
   const g = i => (document.getElementById(i)||{}).value||'';
   const a = allAutos.find(x=>x.id===id);
-  // Pega tipo: _tipoTemp se foi alterado na UI, ou tipo_mensagem salvo, ou inferido
-  const tipo = a?._tipoTemp || getAutoType(a);
+  // getAutoType já prioriza _tipoTemp sobre banco, com checagem explícita de undefined
+  const tipo = getAutoType(a);
   const isCta = tipo === 'cta';
 
   const data = {
@@ -863,6 +867,8 @@ async function saveAuto(id) {
   }
 
   await supa('/automacoes?id=eq.'+id, {method:'PATCH', body:JSON.stringify(data)});
+  // Atualiza objeto local para refletir o tipo salvo, limpa _tipoTemp
+  if (a) { a.tipo_mensagem = tipo; a.botao_texto = data.botao_texto; a.botao_url = data.botao_url; delete a._tipoTemp; }
   toast('✅ Automação salva!'); loadAll(true);
 }
 
