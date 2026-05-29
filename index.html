@@ -27,12 +27,9 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 /* CHAT */
 #pane-chat{flex-direction:row}
 .sidebar{width:280px;border-right:1px solid #1e2a42;display:flex;flex-direction:column;background:#0d1120;flex-shrink:0}
-
-/* Seletor de número */
 .num-selector{padding:8px 12px;border-bottom:1px solid #1e2a42;background:#0a0d14}
 .num-selector select{width:100%;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:6px 10px;outline:none;cursor:pointer}
 .num-selector select:focus{border-color:#25d366}
-
 .sh{padding:10px 14px;border-bottom:1px solid #1e2a42;display:flex;align-items:center;justify-content:space-between}
 .sh span{font-size:13px;font-weight:700}
 .cbadge{background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
@@ -113,6 +110,9 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .ac-info{flex:1}
 .ac-name{font-size:13px;font-weight:700}
 .ac-desc{font-size:11px;color:#6b7a99;margin-top:2px}
+.ac-type-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:6px;font-size:10px;font-weight:700;margin-left:6px}
+.ac-type-badge.text{background:rgba(96,165,250,.08);color:#60a5fa;border:1px solid rgba(96,165,250,.2)}
+.ac-type-badge.cta{background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
 .toggle{position:relative;width:36px;height:20px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0;position:absolute}
 .toggle-track{position:absolute;inset:0;background:#1e2a42;border-radius:10px;cursor:pointer;transition:background .2s}
@@ -129,6 +129,21 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .field input,.field textarea{background:#161c2d;border:1px solid #1e2a42;border-radius:7px;color:#e8edf5;font-size:12px;padding:8px 10px;outline:none;width:100%}
 .field input:focus,.field textarea:focus{border-color:#25d366}
 .field textarea{resize:vertical;font-family:inherit;font-size:13px}
+
+/* Seletor de tipo de mensagem */
+.msg-type-selector{display:flex;gap:8px;margin-top:14px;grid-column:1/-1}
+.msg-type-opt{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 10px;border-radius:10px;border:2px solid #1e2a42;cursor:pointer;transition:all .15s;background:#161c2d;text-align:center}
+.msg-type-opt:hover{border-color:#374151}
+.msg-type-opt.selected{border-color:#25d366;background:rgba(37,211,102,.06)}
+.msg-type-opt.selected.cta-opt{border-color:#fbbf24;background:rgba(251,191,36,.06)}
+.msg-type-opt .mt-icon{font-size:22px;line-height:1}
+.msg-type-opt .mt-label{font-size:12px;font-weight:700;color:#e8edf5}
+.msg-type-opt .mt-desc{font-size:10px;color:#6b7a99;line-height:1.4}
+
+/* Campos de botão CTA na automação */
+.cta-fields{display:contents}
+.cta-fields.hidden .cta-field{display:none}
+
 .kw-wrap{display:flex;flex-wrap:wrap;gap:6px;min-height:36px;background:#161c2d;border:1px solid #1e2a42;border-radius:7px;padding:6px 8px;align-items:center}
 .kw-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
 .kw-tag button{background:none;border:none;color:#25d366;cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 2px}
@@ -142,7 +157,9 @@ body{background:#0a0d14;color:#e8edf5;font-family:system-ui,sans-serif;height:10
 .prev-body{font-size:12px;color:#d1d7db;margin-bottom:4px;word-break:break-word;line-height:1.5}
 .prev-ftr{font-size:10px;color:#8696a0;margin-bottom:6px}
 .prev-btn{border-top:1px solid #2a3942;padding:7px 0;color:#00a884;font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px}
+.prev-bbl-text{padding-bottom:8px}
 .info-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#60a5fa;padding:6px 12px;border-radius:8px;font-size:11px;margin-top:8px}
+.sep{height:1px;background:#1e2a42;margin:12px 0;grid-column:1/-1}
 
 /* MONITOR */
 .mon-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
@@ -370,8 +387,6 @@ function renderNumSelector() {
   sel.innerHTML = '<option value="">📱 Todos os números</option>' +
     allNums.filter(n=>n.ativo).map(n=>`<option value="${n.id}">${esc(n.nome)} — ${esc(n.telefone||'')}</option>`).join('');
   sel.value = cur;
-
-  // Monitor filter
   const mfnum = document.getElementById('mfnum');
   if (mfnum) {
     mfnum.innerHTML = '<option value="">Todos os números</option>' +
@@ -426,10 +441,7 @@ function renderNums() {
 function openAddNum() {
   editingNumId = null;
   document.getElementById('numModalTitle').textContent = '📱 Adicionar Número';
-  document.getElementById('numNome').value = '';
-  document.getElementById('numTelefone').value = '';
-  document.getElementById('numPhoneId').value = '';
-  document.getElementById('numToken').value = '';
+  ['numNome','numTelefone','numPhoneId','numToken'].forEach(i=>document.getElementById(i).value='');
   document.getElementById('ovNum').classList.add('show');
 }
 
@@ -478,15 +490,9 @@ async function deleteNum(id) {
   toast('🗑 Removido'); loadAll(true);
 }
 
-function getNumByPhoneId(phoneNumberId) {
-  return allNums.find(n => n.phone_number_id === phoneNumberId);
-}
-
 function getNumForContact(phone) {
-  // Pega o número pelo qual essa conversa está acontecendo
   const msg = [...allMsgs].reverse().find(m => m.telefone === phone);
   if (msg?.numero_id) return allNums.find(n=>n.id===msg.numero_id);
-  // Fallback: primeiro número ativo
   return allNums.find(n=>n.ativo);
 }
 
@@ -614,8 +620,7 @@ async function sendText(text, num) {
   await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'text',text:{body:text}}, num.access_token, num.phone_number_id);
   await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:text,tipo:'text',botao_texto:'',numero_id:num.id})});
   document.getElementById('msgIn').value='';
-  await loadAll();
-  toast('✅ Enviado!');
+  await loadAll(); toast('✅ Enviado!');
 }
 
 async function sendCTA(bodyText, num) {
@@ -630,8 +635,7 @@ async function sendCTA(bodyText, num) {
   await metaPost({messaging_product:'whatsapp',recipient_type:'individual',to:selPhone,type:'interactive',interactive}, num.access_token, num.phone_number_id);
   await supa('/mensagens_enviadas', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify({telefone:selPhone,nome:contacts[selPhone]?.nome||selPhone,texto:bodyText,tipo:'cta',botao_texto:btnT,numero_id:num.id})});
   document.getElementById('msgIn').value='';
-  await loadAll();
-  toast('✅ CTA enviado!');
+  await loadAll(); toast('✅ CTA enviado!');
 }
 
 async function metaPost(body, token, phoneId) {
@@ -650,6 +654,13 @@ function setMT(t, btn) {
 }
 
 // ── AUTOMAÇÕES ────────────────────────────────────────────
+function getAutoType(a) {
+  // Compatibilidade: se não tem tipo_mensagem salvo, verifica se tem botão configurado
+  if (a.tipo_mensagem) return a.tipo_mensagem;
+  if (a.botao_texto || a.botao_url) return 'cta';
+  return 'text';
+}
+
 function renderAutos() {
   const el = document.getElementById('autoList');
   if (!allAutos.length) {
@@ -663,12 +674,18 @@ function renderAutos() {
 
 function buildAutoCard(a) {
   const kws = (a.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean);
+  const tipo = getAutoType(a);
+  const isCta = tipo === 'cta';
+
   return `
   <div class="auto-card${a.ativo?' enabled':''}" id="acard-${a.id}">
     <div class="ac-hdr" onclick="toggleCard('abody-${a.id}',event)">
-      <div class="ac-icon">${a.ativo?'⚡':'⏸'}</div>
+      <div class="ac-icon">${a.ativo ? (isCta ? '🔗' : '💬') : '⏸'}</div>
       <div class="ac-info">
-        <div class="ac-name">${esc(a.nome||'Sem nome')}</div>
+        <div class="ac-name">
+          ${esc(a.nome||'Sem nome')}
+          <span class="ac-type-badge ${isCta?'cta':'text'}">${isCta?'🔗 Com botão':'💬 Só texto'}</span>
+        </div>
         <div class="ac-desc">Gatilho: ${kws.map(k=>`<b style="color:#25d366">${esc(k)}</b>`).join(', ')||'—'}</div>
       </div>
       <label class="toggle" onclick="event.stopPropagation()">
@@ -679,7 +696,9 @@ function buildAutoCard(a) {
     </div>
     <div class="ac-body" id="abody-${a.id}">
       <div class="field-grid">
+
         <div class="field full"><label>Nome da automação</label><input type="text" id="aname-${a.id}" value="${esc(a.nome||'')}"></div>
+
         <div class="field full">
           <label>Palavras-chave (vale para todos os números)</label>
           <div class="kw-wrap" id="kwwrap-${a.id}">
@@ -691,27 +710,80 @@ function buildAutoCard(a) {
           </div>
           <div class="info-tag">ℹ️ Funciona em todos os números conectados</div>
         </div>
+
+        <!-- Seletor de tipo -->
+        <div class="field full" style="margin-top:4px">
+          <label>Tipo de mensagem</label>
+          <div class="msg-type-selector">
+            <div class="msg-type-opt${!isCta?' selected':''}" id="aopt-text-${a.id}" onclick="setAutoType('${a.id}','text')">
+              <div class="mt-icon">💬</div>
+              <div class="mt-label">Só texto</div>
+              <div class="mt-desc">Mensagem simples sem botão</div>
+            </div>
+            <div class="msg-type-opt cta-opt${isCta?' selected':''}" id="aopt-cta-${a.id}" onclick="setAutoType('${a.id}','cta')">
+              <div class="mt-icon">🔗</div>
+              <div class="mt-label">Com botão CTA</div>
+              <div class="mt-desc">Mensagem com link e botão</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
         <div class="field full"><label>Corpo da mensagem (use {nome} para personalizar)</label><textarea id="abody2-${a.id}" rows="3" oninput="prevUpdate('${a.id}')">${esc(a.mensagem_corpo||'')}</textarea></div>
         <div class="field"><label>Header (opcional)</label><input type="text" id="ahdr-${a.id}" value="${esc(a.mensagem_header||'')}" oninput="prevUpdate('${a.id}')"></div>
         <div class="field"><label>Footer (opcional)</label><input type="text" id="aftr-${a.id}" value="${esc(a.mensagem_footer||'')}" oninput="prevUpdate('${a.id}')"></div>
-        <div class="field"><label>Texto do botão (máx 20)</label><input type="text" id="abtnT-${a.id}" value="${esc(a.botao_texto||'')}" maxlength="20" oninput="prevUpdate('${a.id}')"></div>
-        <div class="field"><label>URL do botão</label><input type="url" id="abtnU-${a.id}" value="${esc(a.botao_url||'')}" oninput="prevUpdate('${a.id}')"></div>
+
+        <!-- Campos de botão — só visíveis se tipo = cta -->
+        <div class="field cta-field-${a.id}" id="acta-btnT-wrap-${a.id}" style="${isCta?'':'display:none'}">
+          <label>Texto do botão (máx 20)</label>
+          <input type="text" id="abtnT-${a.id}" value="${esc(a.botao_texto||'')}" maxlength="20" oninput="prevUpdate('${a.id}')">
+        </div>
+        <div class="field cta-field-${a.id}" id="acta-btnU-wrap-${a.id}" style="${isCta?'':'display:none'}">
+          <label>URL do botão</label>
+          <input type="url" id="abtnU-${a.id}" value="${esc(a.botao_url||'')}" oninput="prevUpdate('${a.id}')">
+        </div>
+
       </div>
+
+      <!-- Preview -->
       <div style="margin-top:14px">
         <div style="font-size:10px;color:#6b7a99;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Preview</div>
-        <div class="preview-box"><div class="prev-bbl">
+        <div class="preview-box"><div class="prev-bbl${isCta?'':' prev-bbl-text'}">
           <div class="prev-hdr" id="prevHdr-${a.id}">${esc(a.mensagem_header||'')}</div>
           <div class="prev-body" id="prevBody-${a.id}">${esc((a.mensagem_corpo||'').replace('{nome}','João'))}</div>
           <div class="prev-ftr" id="prevFtr-${a.id}">${esc(a.mensagem_footer||'')}</div>
-          <div class="prev-btn" id="prevBtn-${a.id}">🔗 ${esc(a.botao_texto||'Botão')}</div>
+          <div class="prev-btn" id="prevBtn-${a.id}" style="${isCta?'':'display:none'}">🔗 ${esc(a.botao_texto||'Botão')}</div>
         </div></div>
       </div>
+
       <div class="ac-actions">
         <button class="btn bg" onclick="saveAuto('${a.id}')">💾 Salvar</button>
         <button class="btn br" onclick="deleteAuto('${a.id}')">🗑 Excluir</button>
       </div>
     </div>
   </div>`;
+}
+
+// Alterna o tipo de mensagem da automação no card (sem salvar ainda)
+function setAutoType(id, tipo) {
+  const a = allAutos.find(x=>x.id===id); if(!a) return;
+  a._tipoTemp = tipo; // guarda temporariamente sem salvar
+
+  const isCta = tipo === 'cta';
+
+  // Atualiza visuais dos botões de seleção
+  document.getElementById('aopt-text-'+id)?.classList.toggle('selected', !isCta);
+  document.getElementById('aopt-cta-'+id)?.classList.toggle('selected', isCta);
+
+  // Mostra/oculta campos de botão
+  document.getElementById('acta-btnT-wrap-'+id).style.display = isCta ? '' : 'none';
+  document.getElementById('acta-btnU-wrap-'+id).style.display = isCta ? '' : 'none';
+
+  // Atualiza preview
+  const prevBtn = document.getElementById('prevBtn-'+id);
+  if (prevBtn) prevBtn.style.display = isCta ? '' : 'none';
+  prevUpdate(id);
 }
 
 function toggleCard(id, e) {
@@ -771,15 +843,25 @@ async function toggleAuto(id, val) {
 async function saveAuto(id) {
   const g = i => (document.getElementById(i)||{}).value||'';
   const a = allAutos.find(x=>x.id===id);
+  // Pega tipo: _tipoTemp se foi alterado na UI, ou tipo_mensagem salvo, ou inferido
+  const tipo = a?._tipoTemp || getAutoType(a);
+  const isCta = tipo === 'cta';
+
   const data = {
     nome:            g('aname-'+id),
     palavras_chave:  (a?.palavras_chave||'').split(',').map(k=>k.trim()).filter(Boolean).join(', '),
     mensagem_corpo:  g('abody2-'+id),
     mensagem_header: g('ahdr-'+id),
     mensagem_footer: g('aftr-'+id),
-    botao_texto:     g('abtnT-'+id),
-    botao_url:       g('abtnU-'+id)
+    botao_texto:     isCta ? g('abtnT-'+id) : '',
+    botao_url:       isCta ? g('abtnU-'+id) : '',
+    tipo_mensagem:   tipo
   };
+
+  if (isCta && (!data.botao_texto || !data.botao_url)) {
+    return toast('⚠️ Preencha o texto e a URL do botão CTA');
+  }
+
   await supa('/automacoes?id=eq.'+id, {method:'PATCH', body:JSON.stringify(data)});
   toast('✅ Automação salva!'); loadAll(true);
 }
@@ -791,12 +873,25 @@ async function deleteAuto(id) {
 }
 
 async function newAuto() {
-  const data = {nome:'Nova automação',palavras_chave:'',mensagem_corpo:'Olá, {nome}! Clique no botão abaixo.',mensagem_header:'',mensagem_footer:'Respondemos em até 2h.',botao_texto:'Acessar agora',botao_url:'https://seusite.com.br',ativo:false};
+  const data = {
+    nome:'Nova automação',
+    palavras_chave:'',
+    mensagem_corpo:'Olá, {nome}! Tudo bem?',
+    mensagem_header:'',
+    mensagem_footer:'',
+    botao_texto:'',
+    botao_url:'',
+    tipo_mensagem:'text',
+    ativo:false
+  };
   await supa('/automacoes', {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(data)});
   toast('✅ Criada! Configure abaixo.');
   await loadAll(true); sw('auto');
   const last = allAutos[allAutos.length-1];
-  if (last) { document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open')); document.getElementById('abody-'+last.id)?.classList.add('open'); }
+  if (last) {
+    document.querySelectorAll('.ac-body').forEach(b=>b.classList.remove('open'));
+    document.getElementById('abody-'+last.id)?.classList.add('open');
+  }
 }
 
 // ── MONITOR ──────────────────────────────────────────────
